@@ -3,6 +3,8 @@ import {Inter} from "next/font/google";
 import "./globals.css";
 import {Providers} from "@/app/providers";
 import React from "react";
+import NavBar from "@/app/components/navbar";
+import Sidebar from "@/app/components/sidebar";
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -16,7 +18,15 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
     <html lang="en" className="light">
     <body className={inter.className}>
       <Providers>
-        {children}
+        <NavBar/>
+        <div className="flex flex-row">
+          <div className="basis-1/4">
+            <Sidebar/>
+          </div>
+          <div className="basis-3/4">
+            {children}
+          </div>
+        </div>
       </Providers>
     </body>
     </html>
