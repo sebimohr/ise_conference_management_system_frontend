@@ -19,11 +19,11 @@ import {ChevronDownIcon} from "@heroicons/react/24/outline";
 
 export default function NavBar() {
   return (
-    <Navbar>
+    <Navbar shouldHideOnScroll>
       <NavbarBrand>
-        <Image className="h-16" alt="reviewer_logo" src="/logo.svg"/>
+        <Image className="h-16" alt="reviewer_logo" src="/logo.webp"/>
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      <NavbarContent className="hidden sm:flex gap-4 space-x-4" justify="center">
         <NavbarItem isActive>
           <Link color="foreground" href="#">
             Home

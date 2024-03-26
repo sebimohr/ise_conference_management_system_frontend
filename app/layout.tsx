@@ -4,7 +4,7 @@ import "./globals.css";
 import {Providers} from "@/app/providers";
 import React from "react";
 import NavBar from "@/app/components/navbar";
-import Sidebar from "@/app/components/sidebar";
+import Footer from "@/app/components/footer";
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -19,14 +19,12 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
     <body className={inter.className}>
       <Providers>
         <NavBar/>
-        <div className="flex flex-row">
-          <div className="basis-1/4">
-            <Sidebar/>
-          </div>
-          <div className="basis-3/4">
+        <div className="flex flex-row h-screen place-content-center">
+          <div className="basis-3/4 p-4">
             {children}
           </div>
         </div>
+        <Footer/>
       </Providers>
     </body>
     </html>
