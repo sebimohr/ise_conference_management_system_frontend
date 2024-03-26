@@ -25,12 +25,12 @@ export default function NavBar() {
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4 space-x-4" justify="center">
         <NavbarItem isActive>
-          <Link color="foreground" href="#">
+          <Link color="foreground" aria-current="page" href="/">
             Home
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link href="#" aria-current="page">
+          <Link href="/papers">
             Papers
           </Link>
         </NavbarItem>
@@ -58,12 +58,14 @@ export default function NavBar() {
             <DropdownItem
               key="autoscaling"
               description="Your saved but incomplete reviews."
+              href="/reviews/drafts"
             >
               Drafts
             </DropdownItem>
             <DropdownItem
               key="autoscaling"
               description="Your already submitted reviews."
+              href="/reviews/submitted"
             >
               Submitted
             </DropdownItem>
@@ -72,7 +74,7 @@ export default function NavBar() {
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
+          <Button as={Link} color="primary" href="/login" variant="flat">
             Sign Out
           </Button>
         </NavbarItem>
