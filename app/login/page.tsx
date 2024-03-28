@@ -34,11 +34,7 @@ export default function Page() {
           }
           endContent={
             <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
-              {isVisible ? (
-                <EyeSlashFilledIcon/>
-              ) : (
-                <EyeFilledIcon/>
-              )}
+              {isVisible ? (<EyeSlashFilledIcon/>) : (<EyeFilledIcon/>)}
             </button>
           }
           type={isVisible ? "text" : "password"}
@@ -46,7 +42,7 @@ export default function Page() {
         />
         <Button
           className="w-1/2 w-min-80"
-          color="success"
+          color="default"
           variant="flat">
           Login
         </Button>
