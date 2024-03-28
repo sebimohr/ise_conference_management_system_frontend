@@ -19,7 +19,7 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
     <body className={inter.className}>
       <Providers>
         <NavBar/>
-        <div className="flex flex-row h-screen place-content-center">
+        <div className="flex min-h-screen place-content-center">
           <div className="basis-3/4 p-4">
             {children}
           </div>
