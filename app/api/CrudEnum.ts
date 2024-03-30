@@ -1,0 +1,5 @@
+enum CRUD {
+  GET,
+  POST
+}
+
