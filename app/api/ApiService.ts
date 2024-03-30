@@ -1,21 +1,17 @@
-import axios from "axios";
-import {
-  BACKEND_API_BASE_URL,
-  ENDPOINT1,
-  ENDPOINT2,
-  ENDPOINT3,
-  ENDPOINT4,
-  ENDPOINT5,
-  ENDPOINT6
-} from "@/app/api/Constants";
+import {BACKEND_API_BASE_URL} from "@/app/api/Constants";
+import {revalidateTag} from "next/cache";
+
+const getTag: string = "getData";
+const baseUrl: string = BACKEND_API_BASE_URL;
 
 class ApiService {
   private static instance: ApiService;
-  private static baseUrl: string;
 
+  /*
   private constructor() {
-    ApiService.baseUrl = "localhost:3001";
+    // TODO: needed?
   }
+  */
 
   public static getInstance(): ApiService {
     if (!ApiService.instance) {
@@ -26,53 +22,53 @@ class ApiService {
   }
 
   private getApiUrl(endpoint: endpointEnum): string {
-    const baseUrl = BACKEND_API_BASE_URL
-
-    let endpointString = "";
-
-    switch (endpoint) {
-      case endpointEnum.endpoint1:
-        endpointString = ENDPOINT1!;
-        break;
-      case endpointEnum.endpoint2:
-        endpointString = ENDPOINT2!;
-        break;
-      case endpointEnum.endpoint3:
-        endpointString = ENDPOINT3!;
-        break;
-      case endpointEnum.endpoint4:
-        endpointString = ENDPOINT4!;
-        break;
-      case endpointEnum.endpoint5:
-        endpointString = ENDPOINT5!;
-        break;
-      case endpointEnum.endpoint6:
-        endpointString = ENDPOINT6!;
-        break;
-    }
-    return `${baseUrl}/${endpointString}`
+    return `${baseUrl}${endpoint.valueOf()}`
   }
 
   private async get(endpoint: endpointEnum): Promise<any> {
-    try {
-      const url = this.getApiUrl(endpoint);
-      const response = await axios.get(url);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching data: ', error);
-      throw error;
+    const url = this.getApiUrl(endpoint);
+    if (endpoint in [
+      endpointEnum.ownOpenReviewsRoute,
+      endpointEnum.ownDraftsReviewsRoute,
+      endpointEnum.ownSubmittedReviewsRoute,
+      endpointEnum.singleReviewRoute,
+      endpointEnum.paperReviewsRoute
+    ]) {
+
     }
+
+    const fetchOptions = {
+      method: 'GET',
+      next: {
+        tags: [getTag] // TODO: only give tag when review gets fetched
+      }
+    };
+    const response = await fetch(url, fetchOptions);
+
+    if (!response.ok)
+      reportError(response);
+
+    return response.json();
   }
 
   private async post(endpoint: endpointEnum, data: any): Promise<any> {
-    try {
-      const url = this.getApiUrl(endpoint);
-      const response = await axios.post(url, data);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching data: ', error);
-      throw error;
-    }
+    const url = this.getApiUrl(endpoint);
+    const fetchOptions = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    };
+    const response = await fetch(url, fetchOptions);
+
+    if (!response.ok)
+      reportError(response);
+
+    revalidateTag(getTag); // TODO: only invalidate cache on new review post
+    return response.json();
+  }
+
+  private reportError(response: Response) {
+    throw new Error('Backend operation failed: ' + response.statusText)
   }
 }
 
