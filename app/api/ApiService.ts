@@ -27,6 +27,8 @@ class ApiService {
 
   private async get(endpoint: endpointEnum): Promise<any> {
     const url = this.getApiUrl(endpoint);
+
+    let nextOptions = {};
     if (endpoint in [
       endpointEnum.ownOpenReviewsRoute,
       endpointEnum.ownDraftsReviewsRoute,
@@ -34,19 +36,19 @@ class ApiService {
       endpointEnum.singleReviewRoute,
       endpointEnum.paperReviewsRoute
     ]) {
-
+      nextOptions = {
+        tags: [getTag]
+      };
     }
 
     const fetchOptions = {
       method: 'GET',
-      next: {
-        tags: [getTag] // TODO: only give tag when review gets fetched
-      }
+      next: nextOptions
     };
     const response = await fetch(url, fetchOptions);
 
     if (!response.ok)
-      reportError(response);
+      this.reportErrorToUser(response);
 
     return response.json();
   }
@@ -61,13 +63,13 @@ class ApiService {
     const response = await fetch(url, fetchOptions);
 
     if (!response.ok)
-      reportError(response);
+      this.reportErrorToUser(response);
 
     revalidateTag(getTag); // TODO: only invalidate cache on new review post
     return response.json();
   }
 
-  private reportError(response: Response) {
+  private reportErrorToUser(response: Response) {
     throw new Error('Backend operation failed: ' + response.statusText)
   }
 }

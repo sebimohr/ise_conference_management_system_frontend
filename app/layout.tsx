@@ -21,7 +21,7 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
         <div className={"min-h-screen flex flex-col"}>
           <NavBar/>
           <div className="flex flex-grow place-content-center">
-            <div className="basis-3/4 p-4">
+            <div className="basis-full px-4 py-4 lg:max-w-screen-xl">
               {children}
             </div>
           </div>
