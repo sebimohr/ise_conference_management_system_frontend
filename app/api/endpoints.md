@@ -9,8 +9,8 @@ The following endpoints are needed for the frontend to work:
 
     ```json
       {
-        "email": string,
-        "password": string
+        "email": <string>,
+        "password": <string>
       }
     ```
 
@@ -25,7 +25,7 @@ The following endpoints are needed for the frontend to work:
 
     ```json
       {
-        "auth-key": string // -> or different format?
+        "auth-key": <string> // -> or different format?
       }
     ```
 
@@ -41,7 +41,7 @@ The following endpoints are needed for the frontend to work:
 
     ```json
       {
-        "auth-key": string // -> or different format?
+        "auth-key": <string> // -> or different format?
       }
     ```
 
@@ -55,7 +55,7 @@ The following endpoints are needed for the frontend to work:
 
     ```json
       {
-        "auth-key": string // -> or different format?
+        "auth-key": <string> // -> or different format?
       }
     ```
 
@@ -69,7 +69,7 @@ The following endpoints are needed for the frontend to work:
 
     ```json
       {
-        "auth-key": string // -> or different format?
+        "auth-key": <string> // -> or different format?
       }
     ```
 
@@ -85,7 +85,7 @@ The following endpoints are needed for the frontend to work:
 
     ```json
       {
-        "auth-key": string // -> or different format?
+        "auth-key": <string> // -> or different format?
       }
     ```
 
@@ -103,7 +103,7 @@ The following endpoints are needed for the frontend to work:
 
     ```json
       {
-        "auth-key": string // -> or different format?
+        "auth-key": <string> // -> or different format?
       }
     ```
 
