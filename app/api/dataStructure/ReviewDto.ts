@@ -1,10 +1,15 @@
 export class ReviewDto {
-  constructor(paperId: string, reviewDate: Date, rating: number, reviewDetails: string, comments: ReviewComment[], reviewState: ReviewStateEnum) {
+  constructor(paperId: string,
+              reviewDate: Date,
+              rating: number,
+              reviewDetails: string,
+              reviewComment: string,
+              reviewState: ReviewStateEnum) {
     this.paperId = paperId;
     this.reviewDate = reviewDate;
     this.rating = rating;
     this.reviewDetails = reviewDetails;
-    this.comments = comments;
+    this.reviewComment = reviewComment;
     this.reviewState = reviewState;
   }
 
@@ -12,6 +17,6 @@ export class ReviewDto {
   reviewDate: Date
   rating: number
   reviewDetails: string
-  comments: ReviewComment[]
+  reviewComment: string // the comment of the current reviewer
   reviewState: ReviewStateEnum
 }

@@ -1,4 +1,4 @@
-import {BACKEND_API_BASE_URL, MOCK_BACKEND} from "@/app/api/Constants";
+import {BACKEND_API_BASE_URL} from "@/app/api/Constants";
 import {revalidateTag} from "next/cache";
 import {IApiEndpoints} from "@/app/api/IApiEndpoints";
 import {LoginDto} from "./dataStructure/LoginDto";
@@ -6,26 +6,11 @@ import {PaperDto} from "./dataStructure/PaperDto";
 import {PaperReviewsDto} from "./dataStructure/PaperReviewsDto";
 import {ReviewDto} from "./dataStructure/ReviewDto";
 import {SingleReviewDto} from "./dataStructure/SingleReviewDto";
-import ApiServiceMock from "./ApiServiceMock";
 
 const paperTag: string = "paperCache";
 
-class ApiService implements IApiEndpoints {
-  private static instance: IApiEndpoints;
-
-  private constructor() {
-  }
-
-  public static getInstance(): IApiEndpoints {
-    if (!ApiService.instance) {
-      if (MOCK_BACKEND) {
-        ApiService.instance = new ApiServiceMock();
-      } else {
-        ApiService.instance = new ApiService();
-      }
-    }
-
-    return ApiService.instance;
+export default class ApiService implements IApiEndpoints {
+  constructor() {
   }
 
   authenticateUserEndpoint(userDto: LoginDto): Promise<any> {
@@ -108,5 +93,3 @@ class ApiService implements IApiEndpoints {
     return response.json();
   }
 }
-
-export default ApiService.getInstance();
