@@ -5,9 +5,7 @@ import {PaperReviewsDto} from "./dataStructure/PaperReviewsDto";
 import {ReviewDto} from "./dataStructure/ReviewDto";
 import {SingleReviewDto} from "./dataStructure/SingleReviewDto";
 
-const paperTag: string = "paperCache";
-
-class ApiServiceMock implements IApiEndpoints {
+export default class ApiServiceMock implements IApiEndpoints {
   private loginMock: boolean = true;
   private openReviewsMock: PaperDto[] = [
     {
@@ -136,11 +134,11 @@ class ApiServiceMock implements IApiEndpoints {
         },
       ]);
 
-  private constructor() {
+  constructor() {
   }
 
   authenticateUserEndpoint(userDto: LoginDto): Promise<any> {
-    return new Promise(_ => true);
+    return new Promise(_ => this.loginMock);
   }
 
   getOpenReviewsEndpoint(): Promise<PaperDto[]> {

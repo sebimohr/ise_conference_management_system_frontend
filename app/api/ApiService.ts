@@ -6,7 +6,7 @@ import {PaperDto} from "./dataStructure/PaperDto";
 import {PaperReviewsDto} from "./dataStructure/PaperReviewsDto";
 import {ReviewDto} from "./dataStructure/ReviewDto";
 import {SingleReviewDto} from "./dataStructure/SingleReviewDto";
-import ApiServiceMock from "@/app/api/ApiServiceMock";
+import ApiServiceMock from "./ApiServiceMock";
 
 const paperTag: string = "paperCache";
 
