@@ -5,7 +5,7 @@ import {SingleReviewDto} from "@/app/api/dataStructure/SingleReviewDto";
 import {PaperReviewsDto} from "@/app/api/dataStructure/PaperReviewsDto";
 
 export interface IApiEndpoints {
-  authenticateUserEndpoint(userDto: LoginDto): Promise<any>
+  authenticateUserEndpoint(userDto: LoginDto): Promise<boolean>
 
   // getUserProfileEndpoint(): Promise<any> --> TODO: only implement if time left
 

@@ -1,4 +1,4 @@
-import {BACKEND_API_BASE_URL} from "@/app/api/Constants";
+import {BACKEND_API_BASE_URL, MOCK_BACKEND} from "@/app/api/Constants";
 import {revalidateTag} from "next/cache";
 import {IApiEndpoints} from "@/app/api/IApiEndpoints";
 import {LoginDto} from "./dataStructure/LoginDto";
@@ -6,6 +6,7 @@ import {PaperDto} from "./dataStructure/PaperDto";
 import {PaperReviewsDto} from "./dataStructure/PaperReviewsDto";
 import {ReviewDto} from "./dataStructure/ReviewDto";
 import {SingleReviewDto} from "./dataStructure/SingleReviewDto";
+import ApiServiceMock from "@/app/api/ApiServiceMock";
 
 const paperTag: string = "paperCache";
 
@@ -17,7 +18,11 @@ class ApiService implements IApiEndpoints {
 
   public static getInstance(): IApiEndpoints {
     if (!ApiService.instance) {
-      ApiService.instance = new ApiService();
+      if (MOCK_BACKEND) {
+        ApiService.instance = new ApiServiceMock();
+      } else {
+        ApiService.instance = new ApiService();
+      }
     }
 
     return ApiService.instance;
