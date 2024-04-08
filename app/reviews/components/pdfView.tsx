@@ -7,11 +7,11 @@ import {defaultLayoutPlugin} from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
-export default function PdfView() {
+export default function PdfView(props: { paper: string }) {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   return (
-    <div className="max-w-xl md:w-full h-full">
+    <div className="w-full h-full">
       <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
         <Viewer
           fileUrl="/ExamplePdf.pdf"
