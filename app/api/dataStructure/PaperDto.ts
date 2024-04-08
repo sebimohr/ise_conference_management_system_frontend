@@ -8,6 +8,7 @@ export class PaperDto {
   submissionDate: Date
   // pdf: string
   conference: string
+  reviewerComments: ReviewComment[]
 
   constructor(id: string,
               title: string,
@@ -17,7 +18,8 @@ export class PaperDto {
               submissionAuthor: string,
               submissionDate: Date,
               // pdf: string,
-              conference: string) {
+              conference: string,
+              reviewerComments: ReviewComment[]) {
     this.id = id;
     this.title = title;
     this.authors = authors;
@@ -27,5 +29,6 @@ export class PaperDto {
     this.submissionDate = submissionDate;
     // this.pdf = pdf;
     this.conference = conference;
+    this.reviewerComments = reviewerComments;
   }
 }

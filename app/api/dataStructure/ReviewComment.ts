@@ -1,12 +1,12 @@
 class ReviewComment {
   id: string
-  time: Date
+  date: Date
   author: string
   comment: string
 
   constructor(id: string, time: Date, author: string, comment: string) {
     this.id = id;
-    this.time = time;
+    this.date = time;
     this.author = author;
     this.comment = comment;
   }

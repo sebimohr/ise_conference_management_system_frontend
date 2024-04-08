@@ -40,7 +40,7 @@ class PaperDto {
 
 class ReviewComments {
   id: string
-  time: Date
+  date: Date
   author: string
   comment: string
 }

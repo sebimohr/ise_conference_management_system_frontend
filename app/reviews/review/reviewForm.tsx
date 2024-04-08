@@ -1,17 +1,21 @@
 'use client'
 
 import React, {useState} from "react";
-import {Button, Popover, PopoverContent, PopoverTrigger, Slider, Textarea} from "@nextui-org/react";
+import {Button, Slider, Textarea, useDisclosure} from "@nextui-org/react";
 import {ApiServiceInstance} from "@/app/api/ApiServiceInstance";
 import {ReviewDto} from "@/app/api/dataStructure/ReviewDto";
+import {SingleReviewDto} from "@/app/api/dataStructure/SingleReviewDto";
+import ReviewCommentsModal from "@/app/reviews/review/reviewCommentsModal";
 
-export default function ReviewForm() {
+export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
   const apiServiceInstance = ApiServiceInstance.getInstance();
 
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
   const [comment, setComment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
   const handleRatingSliderInput = (newRatingValue: number | number[]) => {
     let ratingValueNumber = rating;
@@ -32,14 +36,19 @@ export default function ReviewForm() {
   };
 
   const sendPostRequestForReviewToBackend = (reviewState: ReviewStateEnum) => {
+    setIsLoading(true);
     apiServiceInstance.postReviewEndpoint(new ReviewDto(
       "",
       new Date(),
       rating,
       review,
-      [],
+      comment,
       reviewState
-    ));
+    )).then(() => {
+              setIsLoading(false);
+              // TODO: notify user about progress
+            }
+    );
   }
 
   return (
@@ -83,26 +92,20 @@ export default function ReviewForm() {
           value={comment}
           onValueChange={(val) => setComment(val)}
         />
-        <Popover placement="bottom">
-          <PopoverTrigger>
-            <Button>Comments</Button>
-          </PopoverTrigger>
-          <PopoverContent>
-            {(titleProps) => (
-              <div className="px-1 py-2">
-                <h3 className="text-small font-bold" {...titleProps}>
-                  Other reviewers comments
-                </h3>
-                <div className="text-tiny">This is the popover content</div>
-              </div>
-            )}
-          </PopoverContent>
-        </Popover></div>
+        <Button onPress={onOpen}>Comments</Button>
+        <ReviewCommentsModal isOpen={isOpen}
+                             onOpenChange={onOpenChange}
+                             reviewComments={props.currentReview.paper.reviewerComments}/>
+      </div>
       <div className="flex w-full justify-between">
-        <Button onClick={handleSaveDraft}>
+        <Button
+          isLoading={isLoading}
+          onClick={handleSaveDraft}>
           Save Draft
         </Button>
-        <Button onClick={handleSubmit}>
+        <Button
+          isLoading={isLoading}
+          onClick={handleSubmit}>
           Submit
         </Button>
       </div>
