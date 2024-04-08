@@ -2,7 +2,7 @@
 
 import React from "react";
 import {Modal, ModalBody, ModalContent, ModalHeader} from "@nextui-org/react";
-import ReviewCommentComponent from "@/app/reviews/review/reviewCommentComponent";
+import ReviewCommentComponent from "@/app/reviews/components/reviewCommentComponent";
 
 export default function ReviewCommentsModal(props:{
   isOpen: boolean,
