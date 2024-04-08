@@ -1,4 +1,4 @@
-enum endpointEnum {
+export enum endpointEnum {
   authorizeRoute = "/user/authorize", // used for user authorization
   ownProfileRoute = "/user/profile", // used for profile data
   ownOpenReviewsRoute = "/review/open", // used for getting all open reviews

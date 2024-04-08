@@ -1,3 +1,5 @@
+import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
+
 export class ReviewDto {
   constructor(paperId: string,
               reviewDate: Date,

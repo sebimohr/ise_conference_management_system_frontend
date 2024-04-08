@@ -4,6 +4,7 @@ import {PaperDto} from "./dataStructure/PaperDto";
 import {PaperReviewsDto} from "./dataStructure/PaperReviewsDto";
 import {ReviewDto} from "./dataStructure/ReviewDto";
 import {SingleReviewDto} from "./dataStructure/SingleReviewDto";
+import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
 
 export default class ApiServiceMock implements IApiEndpoints {
   private loginMock: boolean = true;

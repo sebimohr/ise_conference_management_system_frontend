@@ -1,4 +1,4 @@
-enum ReviewStateEnum {
+export enum ReviewStateEnum {
   open,
   draft,
   submitted

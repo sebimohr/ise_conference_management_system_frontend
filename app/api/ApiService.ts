@@ -6,6 +6,7 @@ import {PaperDto} from "./dataStructure/PaperDto";
 import {PaperReviewsDto} from "./dataStructure/PaperReviewsDto";
 import {ReviewDto} from "./dataStructure/ReviewDto";
 import {SingleReviewDto} from "./dataStructure/SingleReviewDto";
+import {endpointEnum} from "./dataStructure/EndpointEnum";
 
 const paperTag: string = "paperCache";
 

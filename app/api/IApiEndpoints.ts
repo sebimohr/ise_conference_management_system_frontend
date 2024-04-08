@@ -15,7 +15,7 @@ export interface IApiEndpoints {
 
   getDraftReviewsEndpoint(): Promise<PaperDto[]>
 
-  getSingleReviewEndpoint(): Promise<SingleReviewDto>
+  getSingleReviewEndpoint(paperId: string): Promise<SingleReviewDto>
 
   postReviewEndpoint(reviewDto: ReviewDto): Promise<any>
 
