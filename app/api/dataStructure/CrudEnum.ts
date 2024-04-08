@@ -1,5 +1,0 @@
-enum CRUD {
-  GET,
-  POST
-}
-

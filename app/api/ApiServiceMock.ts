@@ -13,20 +13,22 @@ export default class ApiServiceMock implements IApiEndpoints {
       title: "Sample Paper 1 - Open",
       authors: ["Author A", "Author B"],
       keywords: ["keyword1", "keyword2"],
-      abstract: "This is the abstract for Sample Paper 1.",
+      paperAbstract: "This is the abstract for Sample Paper 1.",
       submissionAuthor: "John Doe",
       submissionDate: new Date("2024-04-04"),
-      conference: "Conference X"
+      conference: "Conference X",
+      reviewerComments: []
     },
     {
       id: "2",
       title: "Sample Paper 2 - Open",
       authors: ["Author C", "Author D"],
       keywords: ["keyword3", "keyword4"],
-      abstract: "This is the abstract for Sample Paper 2.",
+      paperAbstract: "This is the abstract for Sample Paper 2.",
       submissionAuthor: "Jane Smith",
       submissionDate: new Date("2024-04-05"),
-      conference: "Conference Y"
+      conference: "Conference Y",
+      reviewerComments: []
     },
   ];
   private submittedReviewsMock: PaperDto[] = [
@@ -35,20 +37,22 @@ export default class ApiServiceMock implements IApiEndpoints {
       title: "Sample Paper 3 - Submitted",
       authors: ["Author A", "Author B"],
       keywords: ["keyword1", "keyword2"],
-      abstract: "This is the abstract for Sample Paper 1.",
+      paperAbstract: "This is the abstract for Sample Paper 1.",
       submissionAuthor: "John Doe",
       submissionDate: new Date("2024-04-04"),
-      conference: "Conference X"
+      conference: "Conference X",
+      reviewerComments: []
     },
     {
       id: "4",
       title: "Sample Paper 4 - Submitted",
       authors: ["Author C", "Author D"],
       keywords: ["keyword3", "keyword4"],
-      abstract: "This is the abstract for Sample Paper 2.",
+      paperAbstract: "This is the abstract for Sample Paper 2.",
       submissionAuthor: "Jane Smith",
       submissionDate: new Date("2024-04-05"),
-      conference: "Conference Y"
+      conference: "Conference Y",
+      reviewerComments: []
     },
   ];
   private draftReviewsMock: PaperDto[] = [
@@ -57,20 +61,22 @@ export default class ApiServiceMock implements IApiEndpoints {
       title: "Sample Paper 5 - Draft",
       authors: ["Author A", "Author B"],
       keywords: ["keyword1", "keyword2"],
-      abstract: "This is the abstract for Sample Paper 1.",
+      paperAbstract: "This is the abstract for Sample Paper 1.",
       submissionAuthor: "John Doe",
       submissionDate: new Date("2024-04-04"),
-      conference: "Conference X"
+      conference: "Conference X",
+      reviewerComments: []
     },
     {
       id: "6",
       title: "Sample Paper 6 - Draft",
       authors: ["Author C", "Author D"],
       keywords: ["keyword3", "keyword4"],
-      abstract: "This is the abstract for Sample Paper 2.",
+      paperAbstract: "This is the abstract for Sample Paper 2.",
       submissionAuthor: "Jane Smith",
       submissionDate: new Date("2024-04-05"),
-      conference: "Conference Y"
+      conference: "Conference Y",
+      reviewerComments: []
     },
   ];
   private singleReviewMock: SingleReviewDto =
@@ -82,12 +88,13 @@ export default class ApiServiceMock implements IApiEndpoints {
                    "This is the abstract for Sample Paper 1.",
                    "John Doe",
                    new Date("2024-04-04"),
-                   "Conference X"),
+                   "Conference X",
+                   []),
       new ReviewDto("5",
                     new Date("2024-04-04"),
                     0,
                     "",
-                    [],
+                    "",
                     ReviewStateEnum.open));
   private paperReviewsMock: PaperReviewsDto =
     new PaperReviewsDto(
@@ -98,14 +105,15 @@ export default class ApiServiceMock implements IApiEndpoints {
                    "This is the abstract for Sample Paper 1.",
                    "John Doe",
                    new Date("2024-04-04"),
-                   "Conference X"),
+                   "Conference X",
+                   []),
       [
         {
           paperId: "5",
           reviewDate: new Date("2024-04-04"),
           rating: 2,
           reviewDetails: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
-          comments: [],
+          reviewComment: "comment",
           reviewState: ReviewStateEnum.submitted
         },
         {
@@ -113,7 +121,7 @@ export default class ApiServiceMock implements IApiEndpoints {
           reviewDate: new Date("2024-04-04"),
           rating: 0,
           reviewDetails: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-          comments: [],
+          reviewComment: "comment",
           reviewState: ReviewStateEnum.submitted
         },
         {
@@ -121,7 +129,7 @@ export default class ApiServiceMock implements IApiEndpoints {
           reviewDate: new Date("2024-04-04"),
           rating: -1,
           reviewDetails: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-          comments: [],
+          reviewComment: "comment",
           reviewState: ReviewStateEnum.submitted
         },
         {
@@ -129,7 +137,7 @@ export default class ApiServiceMock implements IApiEndpoints {
           reviewDate: new Date("2024-04-04"),
           rating: 1,
           reviewDetails: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
-          comments: [],
+          reviewComment: "comment",
           reviewState: ReviewStateEnum.draft
         },
       ]);
