@@ -30,7 +30,7 @@ class PaperDto {
   title: string
   authors: string[]
   keywords: string[]
-  abstract: string
+  paperAbstract: string
   submissionAuthor: string
   submissionDate: Date
   pdf: string // TODO: URL? or file? Still has to be decided on!!
