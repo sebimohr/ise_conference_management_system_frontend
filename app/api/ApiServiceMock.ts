@@ -32,6 +32,7 @@ export default class ApiServiceMock implements IApiEndpoints {
       reviewerComments: []
     },
   ];
+
   private submittedReviewsMock: PaperDto[] = [
     {
       id: "3",
@@ -56,6 +57,7 @@ export default class ApiServiceMock implements IApiEndpoints {
       reviewerComments: []
     },
   ];
+
   private draftReviewsMock: PaperDto[] = [
     {
       id: "5",
@@ -80,6 +82,7 @@ export default class ApiServiceMock implements IApiEndpoints {
       reviewerComments: []
     },
   ];
+
   private singleReviewMock: SingleReviewDto =
     new SingleReviewDto(
       new PaperDto("5",
@@ -97,6 +100,7 @@ export default class ApiServiceMock implements IApiEndpoints {
                     "",
                     "",
                     ReviewStateEnum.open));
+
   private paperReviewsMock: PaperReviewsDto =
     new PaperReviewsDto(
       new PaperDto("5",
@@ -150,16 +154,22 @@ export default class ApiServiceMock implements IApiEndpoints {
     return new Promise(_ => this.loginMock);
   }
 
-  getOpenReviewsEndpoint(): Promise<PaperDto[]> {
-    return new Promise(_ => this.openReviewsMock)
-  }
+  getReviewsEndpoint(reviewState: ReviewStateEnum): Promise<PaperDto[]> {
+    let mockDataToUse: PaperDto[];
 
-  getSubmittedReviewsEndpoint(): Promise<PaperDto[]> {
-    return new Promise(_ => this.submittedReviewsMock)
-  }
+    switch (reviewState) {
+      case ReviewStateEnum.open:
+        mockDataToUse = this.openReviewsMock;
+        break;
+      case ReviewStateEnum.draft:
+        mockDataToUse = this.draftReviewsMock;
+        break;
+      case ReviewStateEnum.submitted:
+        mockDataToUse = this.submittedReviewsMock;
+        break;
+    }
 
-  getDraftReviewsEndpoint(): Promise<PaperDto[]> {
-    return new Promise(_ => this.draftReviewsMock)
+    return new Promise(_ => mockDataToUse);
   }
 
   getSingleReviewEndpoint(): Promise<SingleReviewDto> {

@@ -5,7 +5,7 @@ import {Button, Slider, Textarea, useDisclosure} from "@nextui-org/react";
 import {ApiServiceInstance} from "@/app/api/ApiServiceInstance";
 import {ReviewDto} from "@/app/api/dataStructure/ReviewDto";
 import {SingleReviewDto} from "@/app/api/dataStructure/SingleReviewDto";
-import ReviewCommentsModal from "@/app/reviews/components/reviewCommentsModal";
+import ReviewCommentsModal from "@/app/components/review/reviewCommentsModal";
 import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
 
 export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
