@@ -29,11 +29,6 @@ export default function NavBar() {
             Home
           </Link>
         </NavbarItem>
-        <NavbarItem>
-          <Link href="/papers">
-            Papers
-          </Link>
-        </NavbarItem>
         <Dropdown>
           <NavbarItem>
             <DropdownTrigger>
