@@ -1,13 +1,13 @@
 import React from "react";
-import {Card, CardBody, CardHeader, Chip, Divider} from "@nextui-org/react";
+import {Button, Card, CardBody, CardFooter, CardHeader, Chip, Divider, Link} from "@nextui-org/react";
 import {PaperDto} from "@/app/api/dataStructure/PaperDto";
 import {DocumentIcon} from "@heroicons/react/24/outline";
 
 export default function PaperCard(props: { paperDto: PaperDto, isReviewable: boolean }) {
+  let redirectURL = (props.paperDto ? '/reviews/review/' : '/paper/') + props.paperDto.id
+
   return (
     <Card
-      isPressable
-      // TODO: onPress={() => router.push((props.isReviewable ? '/reviews/review/' : '/paper/') + props.paperDto.id)}
       className="w-full space-y-5 p-4"
       radius="lg">
       <CardHeader className="flex gap-3">
@@ -32,5 +32,10 @@ export default function PaperCard(props: { paperDto: PaperDto, isReviewable: boo
         <p className={"text-sm"}>{props.paperDto.paperAbstract}</p>
         {/*  TODO: add rating when props.isReviewable is false */}
       </CardBody>
+      <CardFooter className={"h-16"}>
+        <Button className={"w-full h-full"}
+                as={Link}
+                href={redirectURL}>{props.isReviewable ? "Start Review" : "Show Reviews"}</Button>
+      </CardFooter>
     </Card>);
 }
