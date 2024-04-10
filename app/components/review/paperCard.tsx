@@ -16,15 +16,15 @@ export default function PaperCard(props: { paperDto: PaperDto, isReviewable: boo
           width={40}
           radius="sm"
         />
-        <div className="flex flex-col">
+        <div className="flex flex-col ps-2 gap-2">
           <p className="text-md">{props.paperDto.title}</p>
-          <div className="flex flex-row space-2">
+          <div className="flex flex-row gap-2">
             {props.paperDto
                   .keywords
-                  .map(keyword => <li key={keyword}>
-                    <Chip variant="flat">{keyword}</Chip>
-                  </li>)}
+                  .map(keyword => <Chip key={keyword} variant="flat">{keyword}</Chip>)
+            }
           </div>
+          <p className={"text-sm text-start"}>Author: {props.paperDto.submissionAuthor}</p>
         </div>
       </CardHeader>
       <Divider/>

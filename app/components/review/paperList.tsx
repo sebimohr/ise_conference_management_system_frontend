@@ -6,14 +6,12 @@ import {PaperDto} from "@/app/api/dataStructure/PaperDto";
 
 export default function PaperList(props: { papers: PaperDto[], isReviewable: boolean }) {
   return (
-    <div>
-      <ul className={"grid w-full space-x-4 lg:grid-cols-2"}>
-        {props.papers.map(paperDto => <li key={paperDto.id}>
-          <PaperCard
-            paperDto={paperDto}
-            isReviewable={props.isReviewable}/>
-        </li>)}
-      </ul>
+    <div className={"grid mt-8 w-full gap-4 place-content-stretch lg:grid-cols-2"}>
+      {props.papers.map(paperDto =>
+                          <PaperCard key={paperDto.id}
+                                     paperDto={paperDto}
+                                     isReviewable={props.isReviewable}/>
+      )}
     </div>
   );
 }

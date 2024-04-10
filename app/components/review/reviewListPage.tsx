@@ -27,7 +27,7 @@ export default function ReviewListPage(props: { state: ReviewStateEnum }) {
   }
 
   return (
-    <div>
+    <div className={"pt-8"}>
       <Headline headline={`Your ${currentSiteName} Reviews`}/>
       <PaperList papers={paperList}
                  isReviewable={props.state in [ReviewStateEnum.draft, ReviewStateEnum.open]}/>
