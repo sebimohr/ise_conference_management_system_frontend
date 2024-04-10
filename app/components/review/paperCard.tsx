@@ -2,14 +2,12 @@ import React from "react";
 import {Card, CardBody, CardHeader, Chip, Divider} from "@nextui-org/react";
 import {PaperDto} from "@/app/api/dataStructure/PaperDto";
 import {DocumentIcon} from "@heroicons/react/24/outline";
-import {router} from "next/client";
 
 export default function PaperCard(props: { paperDto: PaperDto, isReviewable: boolean }) {
   return (
     <Card
-      isBlurred
       isPressable
-      onPress={() => router.push((props.isReviewable ? '/reviews/review/' : '/paper/') + props.paperDto.id)}
+      // TODO: onPress={() => router.push((props.isReviewable ? '/reviews/review/' : '/paper/') + props.paperDto.id)}
       className="w-full space-y-5 p-4"
       radius="lg">
       <CardHeader className="flex gap-3">
@@ -23,7 +21,9 @@ export default function PaperCard(props: { paperDto: PaperDto, isReviewable: boo
           <div className="flex flex-row space-2">
             {props.paperDto
                   .keywords
-                  .map(keyword => <Chip variant="flat">{keyword}</Chip>)}
+                  .map(keyword => <li key={keyword}>
+                    <Chip variant="flat">{keyword}</Chip>
+                  </li>)}
           </div>
         </div>
       </CardHeader>

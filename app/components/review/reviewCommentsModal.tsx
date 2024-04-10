@@ -21,7 +21,8 @@ export default function ReviewCommentsModal(props: {
         </ModalHeader>
         <ModalBody>
           <ul>
-            {props.reviewComments.map(comment => <li><ReviewCommentComponent reviewComment={comment}/></li>)}
+            {props.reviewComments.map(comment => <li key={comment.id}><ReviewCommentComponent reviewComment={comment}/>
+            </li>)}
           </ul>
         </ModalBody>
       </ModalContent>

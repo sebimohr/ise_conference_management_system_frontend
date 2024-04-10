@@ -1,6 +1,5 @@
 import {BACKEND_API_BASE_URL} from "@/app/api/Constants";
 import {revalidateTag} from "next/cache";
-import {IApiEndpoints} from "@/app/api/IApiEndpoints";
 import {LoginDto} from "./dataStructure/LoginDto";
 import {PaperDto} from "./dataStructure/PaperDto";
 import {PaperReviewsDto} from "./dataStructure/PaperReviewsDto";
@@ -11,7 +10,17 @@ import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
 
 const paperTag: string = "paperCache";
 
-export default class ApiService implements IApiEndpoints {
+export default class ApiService {
+  private static instance: ApiService;
+
+  public static getInstance(): ApiService {
+    if (!ApiService.instance) {
+      ApiService.instance = new ApiService();
+    }
+
+    return ApiService.instance;
+  }
+
   constructor() {
   }
 
@@ -37,7 +46,7 @@ export default class ApiService implements IApiEndpoints {
     return this.get(routeToUse)
   }
 
-  getSingleReviewEndpoint(): Promise<SingleReviewDto> {
+  getSingleReviewEndpoint(paperId: string): Promise<SingleReviewDto> {
     return this.get(EndpointEnum.singleReviewRoute)
   }
 

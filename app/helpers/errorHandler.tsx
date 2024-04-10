@@ -20,6 +20,7 @@ class ErrorHandler {
     }
 
     // TODO: report errorMessage to frontend snackBar
+    console.log(errorMessage);
 
     // return useRouter().push(redirectString);
     return permanentRedirect(redirectString);
