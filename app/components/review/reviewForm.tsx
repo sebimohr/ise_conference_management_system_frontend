@@ -9,12 +9,10 @@ import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
 import ApiService from "@/app/api/ApiService";
 
 export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
-  const apiServiceInstance = ApiService.getInstance();
-
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
   const [comment, setComment] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPosting, setIsPosting] = useState(false);
 
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
@@ -37,7 +35,7 @@ export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
   };
 
   const sendPostRequestForReviewToBackend = (reviewState: ReviewStateEnum) => {
-    setIsLoading(true);
+    setIsPosting(true);
     ApiService.getInstance().postReviewEndpoint(new ReviewDto(
       "",
       new Date(),
@@ -46,10 +44,9 @@ export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
       comment,
       reviewState
     )).then(() => {
-              setIsLoading(false);
-              // TODO: notify user about progress
-            }
-    );
+      setIsPosting(false);
+      // TODO: notify user about progress
+    });
   }
 
   return (
@@ -57,11 +54,12 @@ export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
       <Slider
         size="lg"
         label="Rating"
+        isDisabled={isPosting}
         showSteps={true}
         step={1}
         maxValue={2}
         minValue={-2}
-        // fillOffset={0}
+        fillOffset={0}
         defaultValue={rating}
         onChange={handleRatingSliderInput}
         classNames={{
@@ -71,6 +69,7 @@ export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
       />
       <Textarea
         isRequired
+        isDisabled={isPosting}
         className="w-full"
         label="Review"
         labelPlacement="outside"
@@ -83,6 +82,7 @@ export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
       />
       <div className="flex-rowa space-x-4">
         <Textarea
+          isDisabled={isPosting}
           className="w-full"
           label="Comment"
           labelPlacement="outside"
@@ -100,12 +100,12 @@ export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
       </div>
       <div className="flex w-full justify-between">
         <Button
-          isLoading={isLoading}
+          isLoading={isPosting}
           onClick={handleSaveDraft}>
           Save Draft
         </Button>
         <Button
-          isLoading={isLoading}
+          isLoading={isPosting}
           onClick={handleSubmit}>
           Submit
         </Button>
