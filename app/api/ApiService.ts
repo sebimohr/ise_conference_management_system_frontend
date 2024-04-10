@@ -1,52 +1,68 @@
 import {BACKEND_API_BASE_URL} from "@/app/api/Constants";
 import {revalidateTag} from "next/cache";
-import {IApiEndpoints} from "@/app/api/IApiEndpoints";
 import {LoginDto} from "./dataStructure/LoginDto";
 import {PaperDto} from "./dataStructure/PaperDto";
 import {PaperReviewsDto} from "./dataStructure/PaperReviewsDto";
 import {ReviewDto} from "./dataStructure/ReviewDto";
 import {SingleReviewDto} from "./dataStructure/SingleReviewDto";
-import {endpointEnum} from "./dataStructure/EndpointEnum";
+import {EndpointEnum} from "./dataStructure/EndpointEnum";
+import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
 
 const paperTag: string = "paperCache";
 
-export default class ApiService implements IApiEndpoints {
+export default class ApiService {
+  private static instance: ApiService;
+
+  public static getInstance(): ApiService {
+    if (!ApiService.instance) {
+      ApiService.instance = new ApiService();
+    }
+
+    return ApiService.instance;
+  }
+
   constructor() {
   }
 
   authenticateUserEndpoint(userDto: LoginDto): Promise<any> {
-    return this.get(endpointEnum.authorizeRoute, userDto)
+    return this.get(EndpointEnum.authorizeRoute, userDto)
   }
 
-  getOpenReviewsEndpoint(): Promise<PaperDto[]> {
-    return this.get(endpointEnum.ownOpenReviewsRoute, null)
+  getReviewsEndpoint(reviewState: ReviewStateEnum): Promise<PaperDto[]> {
+    let routeToUse: EndpointEnum;
+
+    switch (reviewState) {
+      case ReviewStateEnum.open:
+        routeToUse = EndpointEnum.ownOpenReviewsRoute;
+        break;
+      case ReviewStateEnum.draft:
+        routeToUse = EndpointEnum.ownDraftsReviewsRoute;
+        break;
+      case ReviewStateEnum.submitted:
+        routeToUse = EndpointEnum.ownSubmittedReviewsRoute;
+        break;
+    }
+
+    return this.get(routeToUse)
   }
 
-  getSubmittedReviewsEndpoint(): Promise<PaperDto[]> {
-    return this.get(endpointEnum.ownSubmittedReviewsRoute, null)
-  }
-
-  getDraftReviewsEndpoint(): Promise<PaperDto[]> {
-    return this.get(endpointEnum.ownDraftsReviewsRoute, null)
-  }
-
-  getSingleReviewEndpoint(): Promise<SingleReviewDto> {
-    return this.get(endpointEnum.singleReviewRoute, null)
+  getSingleReviewEndpoint(paperId: string): Promise<SingleReviewDto> {
+    return this.get(EndpointEnum.singleReviewRoute)
   }
 
   postReviewEndpoint(reviewDto: ReviewDto): Promise<any> {
-    return this.post(endpointEnum.singleReviewRoute, reviewDto)
+    return this.post(EndpointEnum.singleReviewRoute, reviewDto)
   }
 
   getPaperReviewsEndpoint(paperId: string): Promise<PaperReviewsDto> {
-    return this.get(endpointEnum.paperReviewsRoute, paperId)
+    return this.get(EndpointEnum.paperReviewsRoute, paperId)
   }
 
-  private getApiUrl(endpoint: endpointEnum): string {
+  private getApiUrl(endpoint: EndpointEnum): string {
     return `${BACKEND_API_BASE_URL}${endpoint.valueOf()}`
   }
 
-  private async post(endpoint: endpointEnum, data: any | void): Promise<any> {
+  private async post(endpoint: EndpointEnum, data: any = null): Promise<any> {
     const url = this.getApiUrl(endpoint);
     const fetchOptions = {
       method: 'POST',
@@ -66,15 +82,15 @@ export default class ApiService implements IApiEndpoints {
     throw new Error('Backend operation failed: ' + response.statusText)
   }
 
-  private async get(endpoint: endpointEnum, data: any): Promise<any> {
+  private async get(endpoint: EndpointEnum, data: any = null): Promise<any> {
     const url = this.getApiUrl(endpoint);
 
     let nextOptions = {};
     if (endpoint in [
-      endpointEnum.ownOpenReviewsRoute,
-      endpointEnum.ownDraftsReviewsRoute,
-      endpointEnum.ownSubmittedReviewsRoute,
-      endpointEnum.singleReviewRoute,
+      EndpointEnum.ownOpenReviewsRoute,
+      EndpointEnum.ownDraftsReviewsRoute,
+      EndpointEnum.ownSubmittedReviewsRoute,
+      EndpointEnum.singleReviewRoute,
     ]) {
       nextOptions = {
         tags: [paperTag]

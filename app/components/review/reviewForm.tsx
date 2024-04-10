@@ -2,14 +2,14 @@
 
 import React, {useState} from "react";
 import {Button, Slider, Textarea, useDisclosure} from "@nextui-org/react";
-import {ApiServiceInstance} from "@/app/api/ApiServiceInstance";
 import {ReviewDto} from "@/app/api/dataStructure/ReviewDto";
 import {SingleReviewDto} from "@/app/api/dataStructure/SingleReviewDto";
-import ReviewCommentsModal from "@/app/reviews/components/reviewCommentsModal";
+import ReviewCommentsModal from "@/app/components/review/reviewCommentsModal";
 import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
+import ApiService from "@/app/api/ApiService";
 
 export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
-  const apiServiceInstance = ApiServiceInstance.getInstance();
+  const apiServiceInstance = ApiService.getInstance();
 
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
@@ -38,7 +38,7 @@ export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
 
   const sendPostRequestForReviewToBackend = (reviewState: ReviewStateEnum) => {
     setIsLoading(true);
-    apiServiceInstance.postReviewEndpoint(new ReviewDto(
+    ApiService.getInstance().postReviewEndpoint(new ReviewDto(
       "",
       new Date(),
       rating,

@@ -1,14 +1,12 @@
-import {IApiEndpoints} from "@/app/api/IApiEndpoints";
-import {LoginDto} from "./dataStructure/LoginDto";
 import {PaperDto} from "./dataStructure/PaperDto";
 import {PaperReviewsDto} from "./dataStructure/PaperReviewsDto";
 import {ReviewDto} from "./dataStructure/ReviewDto";
 import {SingleReviewDto} from "./dataStructure/SingleReviewDto";
 import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
 
-export default class ApiServiceMock implements IApiEndpoints {
-  private loginMock: boolean = true;
-  private openReviewsMock: PaperDto[] = [
+export default class ApiServiceMock {
+  public static loginMock: boolean = true;
+  public static openReviewsMock: PaperDto[] = [
     {
       id: "1",
       title: "Sample Paper 1 - Open",
@@ -32,7 +30,8 @@ export default class ApiServiceMock implements IApiEndpoints {
       reviewerComments: []
     },
   ];
-  private submittedReviewsMock: PaperDto[] = [
+
+  public static submittedReviewsMock: PaperDto[] = [
     {
       id: "3",
       title: "Sample Paper 3 - Submitted",
@@ -56,7 +55,8 @@ export default class ApiServiceMock implements IApiEndpoints {
       reviewerComments: []
     },
   ];
-  private draftReviewsMock: PaperDto[] = [
+
+  public static draftReviewsMock: PaperDto[] = [
     {
       id: "5",
       title: "Sample Paper 5 - Draft",
@@ -80,7 +80,8 @@ export default class ApiServiceMock implements IApiEndpoints {
       reviewerComments: []
     },
   ];
-  private singleReviewMock: SingleReviewDto =
+
+  public static singleReviewMock: SingleReviewDto =
     new SingleReviewDto(
       new PaperDto("5",
                    "Sample Paper 5 - Draft",
@@ -97,7 +98,8 @@ export default class ApiServiceMock implements IApiEndpoints {
                     "",
                     "",
                     ReviewStateEnum.open));
-  private paperReviewsMock: PaperReviewsDto =
+
+  public static paperReviewsMock: PaperReviewsDto =
     new PaperReviewsDto(
       new PaperDto("5",
                    "Sample Paper 5 - Draft",
@@ -142,35 +144,4 @@ export default class ApiServiceMock implements IApiEndpoints {
           reviewState: ReviewStateEnum.draft
         },
       ]);
-
-  constructor() {
-  }
-
-  authenticateUserEndpoint(userDto: LoginDto): Promise<any> {
-    return new Promise(_ => this.loginMock);
-  }
-
-  getOpenReviewsEndpoint(): Promise<PaperDto[]> {
-    return new Promise(_ => this.openReviewsMock)
-  }
-
-  getSubmittedReviewsEndpoint(): Promise<PaperDto[]> {
-    return new Promise(_ => this.submittedReviewsMock)
-  }
-
-  getDraftReviewsEndpoint(): Promise<PaperDto[]> {
-    return new Promise(_ => this.draftReviewsMock)
-  }
-
-  getSingleReviewEndpoint(): Promise<SingleReviewDto> {
-    return new Promise(_ => this.singleReviewMock)
-  }
-
-  postReviewEndpoint(reviewDto: ReviewDto): Promise<any> {
-    return new Promise(_ => undefined);
-  }
-
-  getPaperReviewsEndpoint(paperId: string): Promise<PaperReviewsDto> {
-    return new Promise(_ => this.paperReviewsMock)
-  }
 }

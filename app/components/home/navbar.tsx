@@ -1,6 +1,6 @@
 'use client'
 
-import React from "react";
+import React, {useState} from "react";
 import {
   Button,
   Dropdown,
@@ -14,10 +14,12 @@ import {
   NavbarItem
 } from "@nextui-org/react";
 import Link from "next/link";
-import {ChevronDownIcon} from "@heroicons/react/24/outline";
+import {ChevronDownIcon, ChevronRightIcon} from "@heroicons/react/24/outline";
 
 
 export default function NavBar() {
+  const [dropDownOpen, setDropDownOpen] = useState(false);
+
   return (
     <Navbar shouldHideOnScroll>
       <NavbarBrand>
@@ -29,12 +31,9 @@ export default function NavBar() {
             Home
           </Link>
         </NavbarItem>
-        <NavbarItem>
-          <Link href="/papers">
-            Papers
-          </Link>
-        </NavbarItem>
-        <Dropdown>
+        <Dropdown
+          onOpenChange={setDropDownOpen}
+        >
           <NavbarItem>
             <DropdownTrigger>
               <Button
@@ -42,30 +41,37 @@ export default function NavBar() {
                 className="p-0 bg-transparent data-[hover=true]:bg-transparent"
                 radius="sm"
                 variant="light"
-                endContent={<ChevronDownIcon/>}
+                endContent={dropDownOpen ? <ChevronDownIcon/> : <ChevronRightIcon/>}
               >
                 Reviews
               </Button>
             </DropdownTrigger>
           </NavbarItem>
           <DropdownMenu
-            aria-label="Review statusse"
+            aria-label="Review statuses"
             className="w-[340px]"
             itemClasses={{
               base: "gap-4",
             }}
           >
             <DropdownItem
-              key="autoscaling"
+              key="openReviews"
+              description="Your reviews that you haven't started yet."
+              href="/reviews/list/open"
+            >
+              Open
+            </DropdownItem>
+            <DropdownItem
+              key="draftReviews"
               description="Your saved but incomplete reviews."
-              href="/reviews/drafts"
+              href="/reviews/list/draft"
             >
               Drafts
             </DropdownItem>
             <DropdownItem
-              key="autoscaling"
+              key="submittedReviews"
               description="Your already submitted reviews."
-              href="/reviews/submitted"
+              href="/reviews/list/submitted"
             >
               Submitted
             </DropdownItem>

@@ -1,27 +1,16 @@
+import {permanentRedirect} from "next/navigation";
+
 export enum severityEnum {
   warning,
   error,
   fatal
 }
 
-export default class ErrorHandler {
-  constructor(severity: severityEnum,
-              errorMessage: string,
-              shouldRedirect: boolean = false,
-              redirectString: string = "") {
-    this.severity = severity;
-    this.errorMessage = errorMessage;
-    this.shouldRedirect = shouldRedirect;
-    this.redirectString = redirectString;
-  }
-
-  private readonly severity: severityEnum
-  private readonly errorMessage: string
-  private readonly shouldRedirect: boolean
-  private readonly redirectString: string
-
-  public execute() {
-    switch (this.severity) {
+class ErrorHandler {
+  public static handleError(severity: severityEnum,
+                            errorMessage: string,
+                            redirectString: string = "/") {
+    switch (severity) {
       case severityEnum.warning:
         break;
       case severityEnum.error:
@@ -30,18 +19,12 @@ export default class ErrorHandler {
         break;
     }
 
-    return this.redirectIfRequested();
-  }
+    // TODO: report errorMessage to frontend snackBar
+    console.log(errorMessage);
 
-  private redirectIfRequested() {
-    if (this.shouldRedirect) {
-      return {
-        redirect: {
-          destination: this.redirectString ?? "/",
-          permanent: false
-        }
-      }
-    }
+    // return useRouter().push(redirectString);
+    return permanentRedirect(redirectString);
   }
 }
 
+export default ErrorHandler.handleError;

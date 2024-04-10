@@ -1,26 +1,26 @@
 import React from "react";
-import Link from "next/link";
+import {Image, Link} from "@nextui-org/react";
 
 export default function Footer() {
   return (
     <div className="flex justify-between items-center bg-gray-100 dark:bg-gray-800 py-6 px-8">
       <div className="flex gap-4">
-        <img
+        <Image
           alt="QR Code 1"
           className="w-24 h-24"
           height="100"
-          src="/placeholder.svg"
+          src="/qr_frontend_github.svg"
           style={{
             aspectRatio: "100/100",
             objectFit: "cover",
           }}
           width="100"
         />
-        <img
+        <Image
           alt="QR Code 2"
           className="w-24 h-24"
           height="100"
-          src="/placeholder.svg"
+          src="/qr_backend_github.svg"
           style={{
             aspectRatio: "100/100",
             objectFit: "cover",
@@ -35,16 +35,24 @@ export default function Footer() {
         </p>
       </div>
       <nav className="flex gap-4">
-        <Link className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50" href="#">
+        <Link className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+              href="#"
+              isDisabled>
           About Us
         </Link>
-        <Link className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50" href="#">
+        <Link className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+              href="#"
+              isDisabled>
           Services
         </Link>
-        <Link className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50" href="#">
+        <Link className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+              href="#"
+              isDisabled>
           Contact
         </Link>
-        <Link className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50" href="#">
+        <Link className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+              href="#"
+              isDisabled>
           Help
         </Link>
       </nav>
