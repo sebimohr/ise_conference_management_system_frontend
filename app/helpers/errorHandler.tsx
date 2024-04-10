@@ -1,21 +1,24 @@
 import {permanentRedirect} from "next/navigation";
 
-export enum severityEnum {
+export enum SeverityEnum {
+  success,
   warning,
   error,
   fatal
 }
 
 class ErrorHandler {
-  public static handleError(severity: severityEnum,
+  public static handleError(severity: SeverityEnum,
                             errorMessage: string,
                             redirectString: string = "/") {
     switch (severity) {
-      case severityEnum.warning:
+      case SeverityEnum.success:
+        return;
+      case SeverityEnum.warning:
         break;
-      case severityEnum.error:
+      case SeverityEnum.error:
         break;
-      case severityEnum.fatal:
+      case SeverityEnum.fatal:
         break;
     }
 
