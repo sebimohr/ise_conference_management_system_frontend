@@ -18,7 +18,7 @@ The following endpoints are needed for the frontend to work:
 
   - the return should be:
     - 200 (OK - login successful) -> **including authentication key!**
-    - 400 (Bad Request - login unsuccessfull)
+    - 401 (Unauthorized - login unsuccessfull)
 
 ## Endpoint for reviews that are still open, in draft state or submitted
 
@@ -46,13 +46,11 @@ class ReviewComments {
 }
   ```
 
-All the endpoints should receive a body that includes a userToken, so they can authorize the user:
+All the endpoints should receive a auth header that includes a userToken, so they can authorize the user:
 
-```json
-{
-  // this string is the authToken, that gets returned from the authorizationEndpoint 
-  "authToken": string
-}
+```js
+const myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjE3ZTJjMmNhMzgzNmEyMmU2NDIxMDUiLCJpYXQiOjE3MTI4NDYwNTN9.fK4cdbnNsIB5sqOV2LZ6OOMsm-qnIpSdVAA6cuFohaA");
 ```
 
 - open reviews endpoint: `/review/open`
@@ -73,6 +71,8 @@ All the endpoints should receive a body that includes a userToken, so they can a
 ## SingleReviewEndpoint
 
 This endpoint should only show a single paper with a review:
+
+> I used paper instead of paperId because it is nosql db
 
 ```typescript
 class SingleReviewDto {
@@ -98,10 +98,10 @@ enum ReviewStateEnum {
 
 - single review endpoint: `/review/{ID}`
 
-  - `{ID}` is the ID of the paper that should be reviewed
+  - `{ID}` is the ID of the paper that should be reviewed - ID should be review id because one paper my has lots of reviews
   - This endpoint should show the review that the user can edit,
     either with the draft information or empty comment, review, rating...
-  - The return should be of type `SingleReviewDto`
+  - The return should be of type `SingleReviewDto` 
 
   - __the endpoint should also accept post requests, where a new draft state or review submission can be saved__
 
@@ -115,12 +115,15 @@ class PaperReviewsDto {
   reviews: ReviewDto[]
 }
 ```
+> I changed the response a bit because of the embedded attributes
 
 - paper reviews endpoint: `/paper/{ID}`
 
+> changed /reviews/id because we will pull the reviews not the papers. Main object is paper
+
   - `{ID}` is the ID of the paper that should be reviewed
   - This endpoint should show the reviews on a specific paper
-  - The return should be of type `PaperReviewsDto`
+  - The return should be of type `PaperReviewsDto` 
 
 > All endpoints should also be able to return `403 unauthorized`
 > if the user tries to get information he shouldn't get
