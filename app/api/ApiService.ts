@@ -1,5 +1,4 @@
 import {BACKEND_API_BASE_URL} from "@/app/api/Constants";
-import {revalidateTag} from "next/cache";
 import {LoginDto} from "./dataStructure/LoginDto";
 import {PaperDto} from "./dataStructure/PaperDto";
 import {PaperReviewsDto} from "./dataStructure/PaperReviewsDto";
@@ -21,11 +20,8 @@ export default class ApiService {
     return ApiService.instance;
   }
 
-  constructor() {
-  }
-
-  authenticateUserEndpoint(userDto: LoginDto): Promise<any> {
-    return this.get(EndpointEnum.authorizeRoute, userDto)
+  authenticateUserEndpoint(loginDto: LoginDto): Promise<Response> {
+    return this.post(EndpointEnum.authorizeRoute, loginDto)
   }
 
   getReviewsEndpoint(reviewState: ReviewStateEnum): Promise<PaperDto[]> {
@@ -43,11 +39,11 @@ export default class ApiService {
         break;
     }
 
-    return this.get(routeToUse)
+    return this.get(routeToUse).then(res => res.json())
   }
 
   getSingleReviewEndpoint(paperId: string): Promise<SingleReviewDto> {
-    return this.get(EndpointEnum.singleReviewRoute)
+    return this.get(EndpointEnum.singleReviewRoute).then(res => res.json())
   }
 
   postReviewEndpoint(reviewDto: ReviewDto): Promise<any> {
@@ -55,34 +51,34 @@ export default class ApiService {
   }
 
   getPaperReviewsEndpoint(paperId: string): Promise<PaperReviewsDto> {
-    return this.get(EndpointEnum.paperReviewsRoute, paperId)
+    return this.get(EndpointEnum.paperReviewsRoute).then(res => res.json())
   }
 
   private getApiUrl(endpoint: EndpointEnum): string {
     return `${BACKEND_API_BASE_URL}${endpoint.valueOf()}`
   }
 
-  private async post(endpoint: EndpointEnum, data: any = null): Promise<any> {
+  private async post(endpoint: EndpointEnum, data: any = null): Promise<Response> {
     const url = this.getApiUrl(endpoint);
     const fetchOptions = {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(data)
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
     };
+    // noinspection UnnecessaryLocalVariableJS
     const response = await fetch(url, fetchOptions);
 
-    if (!response.ok)
-      this.reportErrorToUser(response);
-
-    revalidateTag(paperTag); // TODO: only invalidate cache on new review post
-    return response.json();
+    // revalidateTag(paperTag); // TODO: only invalidate cache on new review post
+    return response;
   }
 
   private reportErrorToUser(response: Response) {
     throw new Error('Backend operation failed: ' + response.statusText)
   }
 
-  private async get(endpoint: EndpointEnum, data: any = null): Promise<any> {
+  private async get(endpoint: EndpointEnum): Promise<Response> {
     const url = this.getApiUrl(endpoint);
 
     let nextOptions = {};
@@ -100,13 +96,8 @@ export default class ApiService {
     const fetchOptions = {
       method: 'GET',
       next: nextOptions,
-      body: JSON.stringify(data)
     };
-    const response = await fetch(url, fetchOptions);
 
-    if (!response.ok)
-      this.reportErrorToUser(response);
-
-    return response.json();
+    return await fetch(url, fetchOptions);
   }
 }
