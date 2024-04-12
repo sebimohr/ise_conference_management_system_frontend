@@ -3,32 +3,31 @@ import Headline from "@/app/components/review/headline";
 import PaperList from "@/app/components/review/paperList";
 import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
 import {PaperDto} from "@/app/api/dataStructure/PaperDto";
+import ApiService from "@/app/api/ApiService";
 import ApiServiceMock from "@/app/api/ApiServiceMock";
 
-export default function ReviewListPage(props: { state: ReviewStateEnum }) {
+export default async function ReviewListPage(props: { state: ReviewStateEnum }) {
   // TODO: check paper fetching
+  const apiService = ApiService.getInstance();
+  let paperList: PaperDto[] = ApiServiceMock.openReviewsMock;
 
-  let currentSiteName: string;
-  let paperList: PaperDto[];
+  // await apiService.getReviewsEndpoint(props.state)
+  //                 .then(data => paperList = data);
 
-  switch (props.state) {
+  let currentSiteName = () => {
+    switch (props.state) {
     case ReviewStateEnum.open:
-      currentSiteName = "Open";
-      paperList = ApiServiceMock.openReviewsMock;
-      break;
+      return "Open";
     case ReviewStateEnum.draft:
-      currentSiteName = "Draft";
-      paperList = ApiServiceMock.draftReviewsMock;
-      break;
+      return "Draft";
     case ReviewStateEnum.submitted:
-      currentSiteName = "Submitted";
-      paperList = ApiServiceMock.submittedReviewsMock;
-      break;
+      return "Submitted";
+    }
   }
 
   return (
     <div className={"pt-8"}>
-      <Headline headline={`Your ${currentSiteName} Reviews`}/>
+      <Headline headline={`Your ${currentSiteName()} Reviews`}/>
       <PaperList papers={paperList}
                  isReviewable={props.state in [ReviewStateEnum.draft, ReviewStateEnum.open]}/>
     </div>

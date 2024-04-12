@@ -14,7 +14,7 @@ export default function Page({params}: { params: { paperId: string } }) {
 
   return (
     <div className="grid w-full space-x-4 lg:grid-cols-2">
-      <PdfView paper={currentReviewDto.paper.paperAbstract}/> {/* TODO: replace paper with pdf, also in component*/}
+      <PdfView paper={currentReviewDto.paper.pdf}/> {/* TODO: replace paper with pdf, also in component*/}
       <ReviewForm currentReview={currentReviewDto}/>
     </div>
   );

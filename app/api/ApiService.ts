@@ -1,10 +1,11 @@
-import {BACKEND_API_BASE_URL} from "@/app/api/Constants";
-import {LoginDto} from "./dataStructure/LoginDto";
-import {ReviewDto} from "./dataStructure/ReviewDto";
-import {EndpointEnum} from "./dataStructure/EndpointEnum";
-import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
+import { BACKEND_API_BASE_URL } from "@/app/api/Constants";
+import { LoginDto } from "./dataStructure/LoginDto";
+import { ReviewDto } from "./dataStructure/ReviewDto";
+import { EndpointEnum } from "./dataStructure/EndpointEnum";
+import { ReviewStateEnum } from "@/app/api/dataStructure/ReviewStateEnum";
 
 const paperTag: string = "paperCache";
+// const bearer = "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjE3ZTJjMmNhMzgzNmEyMmU2NDIxMDUiLCJpYXQiOjE3MTI4ODM1NzF9.k1hkaB1oyAISPce5yXbqVy1i5X_bSFE5tbCYuTjRaDk";
 
 export default class ApiService {
   private static instance: ApiService;
@@ -18,7 +19,7 @@ export default class ApiService {
   }
 
   authenticateUserEndpoint(loginDto: LoginDto): Promise<Response> {
-    return this.post(EndpointEnum.authorizeRoute, loginDto)
+    return this.post(EndpointEnum.authorizeRoute, loginDto);
   }
 
   getReviewsEndpoint(reviewState: ReviewStateEnum): Promise<Response> {
@@ -36,31 +37,34 @@ export default class ApiService {
         break;
     }
 
-    return this.get(routeToUse)
+    return this.get(routeToUse);
   }
 
   getSingleReviewEndpoint(paperId: string): Promise<Response> {
-    return this.get(EndpointEnum.singleReviewRoute)
+    return this.get(EndpointEnum.singleReviewRoute);
   }
 
   postReviewEndpoint(reviewDto: ReviewDto): Promise<Response> {
-    return this.post(EndpointEnum.singleReviewRoute, reviewDto)
+    return this.post(EndpointEnum.singleReviewRoute, reviewDto);
   }
 
   getPaperReviewsEndpoint(paperId: string): Promise<Response> {
-    return this.get(EndpointEnum.paperReviewsRoute)
+    return this.get(EndpointEnum.paperReviewsRoute);
   }
 
   private getApiUrl(endpoint: EndpointEnum): string {
-    return `${BACKEND_API_BASE_URL}${endpoint.valueOf()}`
+    return `${BACKEND_API_BASE_URL}${endpoint.valueOf()}`;
   }
 
-  private async post(endpoint: EndpointEnum, data: any = null): Promise<Response> {
+  private async post(
+    endpoint: EndpointEnum,
+    data: any = null
+  ): Promise<Response> {
     const url = this.getApiUrl(endpoint);
     const fetchOptions = {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     };
@@ -72,27 +76,31 @@ export default class ApiService {
   }
 
   private reportErrorToUser(response: Response) {
-    throw new Error('Backend operation failed: ' + response.statusText)
+    throw new Error("Backend operation failed: " + response.statusText);
   }
 
   private async get(endpoint: EndpointEnum): Promise<Response> {
     const url = this.getApiUrl(endpoint);
 
     let nextOptions = {};
-    if (endpoint in [
-      EndpointEnum.ownOpenReviewsRoute,
-      EndpointEnum.ownDraftsReviewsRoute,
-      EndpointEnum.ownSubmittedReviewsRoute,
-      EndpointEnum.singleReviewRoute,
-    ]) {
+    if (
+      endpoint in
+      [
+        EndpointEnum.ownOpenReviewsRoute,
+        EndpointEnum.ownDraftsReviewsRoute,
+        EndpointEnum.ownSubmittedReviewsRoute,
+        EndpointEnum.singleReviewRoute,
+      ]
+    ) {
       nextOptions = {
-        tags: [paperTag]
+        tags: [paperTag],
       };
     }
 
     const fetchOptions = {
-      method: 'GET',
+      method: "GET",
       next: nextOptions,
+      // authorization: bearer
     };
 
     return await fetch(url, fetchOptions);

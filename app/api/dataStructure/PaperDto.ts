@@ -6,7 +6,7 @@ export class PaperDto {
   paperAbstract: string
   submissionAuthor: string
   submissionDate: Date
-  // pdf: string
+  pdf: string
   conference: string
   reviewerComments: ReviewComment[]
 
@@ -17,7 +17,7 @@ export class PaperDto {
               paperAbstract: string,
               submissionAuthor: string,
               submissionDate: Date,
-              // pdf: string,
+              pdf: string,
               conference: string,
               reviewerComments: ReviewComment[]) {
     this.id = id;
@@ -27,7 +27,7 @@ export class PaperDto {
     this.paperAbstract = paperAbstract;
     this.submissionAuthor = submissionAuthor;
     this.submissionDate = submissionDate;
-    // this.pdf = pdf;
+    this.pdf = pdf;
     this.conference = conference;
     this.reviewerComments = reviewerComments;
   }

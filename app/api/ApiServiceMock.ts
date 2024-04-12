@@ -15,6 +15,7 @@ export default class ApiServiceMock {
       paperAbstract: "This is the abstract for Sample Paper 1.",
       submissionAuthor: "John Doe",
       submissionDate: new Date("2024-04-04"),
+      pdf: "",
       conference: "Conference X",
       reviewerComments: []
     },
@@ -26,6 +27,7 @@ export default class ApiServiceMock {
       paperAbstract: "This is the abstract for Sample Paper 2.",
       submissionAuthor: "Jane Smith",
       submissionDate: new Date("2024-04-05"),
+      pdf: "",
       conference: "Conference Y",
       reviewerComments: []
     },
@@ -40,6 +42,7 @@ export default class ApiServiceMock {
       paperAbstract: "This is the abstract for Sample Paper 1.",
       submissionAuthor: "John Doe",
       submissionDate: new Date("2024-04-04"),
+      pdf: "",
       conference: "Conference X",
       reviewerComments: []
     },
@@ -51,6 +54,7 @@ export default class ApiServiceMock {
       paperAbstract: "This is the abstract for Sample Paper 2.",
       submissionAuthor: "Jane Smith",
       submissionDate: new Date("2024-04-05"),
+      pdf: "",
       conference: "Conference Y",
       reviewerComments: []
     },
@@ -65,6 +69,7 @@ export default class ApiServiceMock {
       paperAbstract: "This is the abstract for Sample Paper 1.",
       submissionAuthor: "John Doe",
       submissionDate: new Date("2024-04-04"),
+      pdf: "",
       conference: "Conference X",
       reviewerComments: []
     },
@@ -76,6 +81,7 @@ export default class ApiServiceMock {
       paperAbstract: "This is the abstract for Sample Paper 2.",
       submissionAuthor: "Jane Smith",
       submissionDate: new Date("2024-04-05"),
+      pdf: "",
       conference: "Conference Y",
       reviewerComments: []
     },
@@ -90,6 +96,7 @@ export default class ApiServiceMock {
                    "This is the abstract for Sample Paper 1.",
                    "John Doe",
                    new Date("2024-04-04"),
+                   "",
                    "Conference X",
                    []),
       new ReviewDto("5",
@@ -108,6 +115,7 @@ export default class ApiServiceMock {
                    "This is the abstract for Sample Paper 1.",
                    "John Doe",
                    new Date("2024-04-04"),
+                   "",
                    "Conference X",
                    []),
       [
