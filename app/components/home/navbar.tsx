@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
   Button,
   Dropdown,
@@ -15,13 +15,23 @@ import {
 } from "@nextui-org/react";
 import Link from "next/link";
 import {ChevronDownIcon, ChevronRightIcon} from "@heroicons/react/24/outline";
-import {removeAuthSessionKey} from "@/app/api/SessionManagement";
+import {getAuthSessionKey, removeAuthSessionKey} from "@/app/api/SessionManagement";
+import {ROUTE_HOME, ROUTE_LOGIN, ROUTE_REVIEWS} from "@/app/components/home/routes";
+import {usePathname} from "next/navigation";
 
 
 export default function NavBar() {
   const [dropDownOpen, setDropDownOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [userIsLoggedIn, setUserIsLoggedIn] = useState(false);
 
-  let userMustLogIn = false; // TODO: should be dynamic
+  useEffect(() => {
+    getAuthSessionKey().then(val => {
+      setLoading(true)
+      setUserIsLoggedIn(val != undefined)
+      setLoading(false)
+    })
+  });
 
   return (
     <Navbar shouldHideOnScroll>
@@ -29,8 +39,8 @@ export default function NavBar() {
         <Image className="h-16" alt="reviewer_logo" src="/logo.webp"/>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4 space-x-4" justify="center">
-        <NavbarItem isActive>
-          <Link color="foreground" aria-current="page" href="/">
+        <NavbarItem isActive={usePathname() == ROUTE_HOME}>
+          <Link color="foreground" aria-current="page" href={ROUTE_HOME}>
             Home
           </Link>
         </NavbarItem>
@@ -46,7 +56,7 @@ export default function NavBar() {
                 variant="light"
                 endContent={dropDownOpen ? <ChevronDownIcon/> : <ChevronRightIcon/>}
               >
-                Reviews
+                {usePathname().startsWith(ROUTE_REVIEWS) ? <b>Reviews</b> : "Reviews"}
               </Button>
             </DropdownTrigger>
           </NavbarItem>
@@ -60,21 +70,21 @@ export default function NavBar() {
             <DropdownItem
               key="openReviews"
               description="Your reviews that you haven't started yet."
-              href="/reviews/list/open"
+              href={`${ROUTE_REVIEWS}/list/open`}
             >
               Open
             </DropdownItem>
             <DropdownItem
               key="draftReviews"
               description="Your saved but incomplete reviews."
-              href="/reviews/list/draft"
+              href={`${ROUTE_REVIEWS}/list/draft`}
             >
               Drafts
             </DropdownItem>
             <DropdownItem
               key="submittedReviews"
               description="Your already submitted reviews."
-              href="/reviews/list/submitted"
+              href={`${ROUTE_REVIEWS}/list/submitted`}
             >
               Submitted
             </DropdownItem>
@@ -82,19 +92,23 @@ export default function NavBar() {
         </Dropdown>
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem>
-          {userMustLogIn ?
-            <Button as={Link} color="primary" href="/login" variant="flat">
-              Sign In
-            </Button> :
-            <Button as={Link}
-                    color="primary"
-                    onClick={async () => await removeAuthSessionKey()}
-                    href="/login"
-                    variant="flat">
-              Sign Out
-            </Button>}
-        </NavbarItem>
+        {!loading ?
+          <NavbarItem>
+            {userIsLoggedIn ?
+              <Button as={Link}
+                      color="primary"
+                      onClick={async () => await removeAuthSessionKey()}
+                      href={ROUTE_LOGIN}
+                      variant="flat">
+                Sign Out
+              </Button> :
+              <Button as={Link} color="primary" href={ROUTE_LOGIN} variant="flat">
+                Sign In
+              </Button>
+            }
+          </NavbarItem> :
+          <></>
+        }
       </NavbarContent>
     </Navbar>
   )
