@@ -1,6 +1,6 @@
 import React from "react";
 import Headline from "@/app/components/review/headline";
-import PaperList from "@/app/components/review/paperList";
+import ReviewPaperList from "@/app/components/review/reviewPaperList";
 import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
 import {PaperDto} from "@/app/api/dataStructure/PaperDto";
 import ApiService from "@/app/api/ApiService";
@@ -28,8 +28,7 @@ export default async function ReviewListPage(props: { state: ReviewStateEnum }) 
   return (
     <div className={"pt-8"}>
       <Headline headline={`Your ${currentSiteName()} Reviews`}/>
-      <PaperList papers={paperList}
-                 isReviewable={props.state in [ReviewStateEnum.draft, ReviewStateEnum.open]}/>
+      <ReviewPaperList reviewState={props.state}/>
     </div>
   );
 }

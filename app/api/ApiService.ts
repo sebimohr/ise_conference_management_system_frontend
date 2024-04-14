@@ -1,11 +1,11 @@
-import { BACKEND_API_BASE_URL } from "@/app/api/Constants";
-import { LoginDto } from "./dataStructure/LoginDto";
-import { ReviewDto } from "./dataStructure/ReviewDto";
-import { EndpointEnum } from "./dataStructure/EndpointEnum";
-import { ReviewStateEnum } from "@/app/api/dataStructure/ReviewStateEnum";
+import {BACKEND_API_BASE_URL} from "@/app/api/Constants";
+import {UserDto} from "./dataStructure/UserDto";
+import {ReviewDto} from "./dataStructure/ReviewDto";
+import {EndpointEnum} from "./dataStructure/EndpointEnum";
+import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
+import {getAuthSessionKey} from "@/app/api/SessionManagement";
 
 const paperTag: string = "paperCache";
-// const bearer = "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjE3ZTJjMmNhMzgzNmEyMmU2NDIxMDUiLCJpYXQiOjE3MTI4ODM1NzF9.k1hkaB1oyAISPce5yXbqVy1i5X_bSFE5tbCYuTjRaDk";
 
 export default class ApiService {
   private static instance: ApiService;
@@ -18,7 +18,7 @@ export default class ApiService {
     return ApiService.instance;
   }
 
-  authenticateUserEndpoint(loginDto: LoginDto): Promise<Response> {
+  authenticateUserEndpoint(loginDto: UserDto): Promise<Response> {
     return this.post(EndpointEnum.authorizeRoute, loginDto);
   }
 
@@ -49,7 +49,7 @@ export default class ApiService {
   }
 
   getPaperReviewsEndpoint(paperId: string): Promise<Response> {
-    return this.get(EndpointEnum.paperReviewsRoute);
+    return this.get(EndpointEnum.paperRoute);
   }
 
   private getApiUrl(endpoint: EndpointEnum): string {
@@ -60,6 +60,12 @@ export default class ApiService {
     endpoint: EndpointEnum,
     data: any = null
   ): Promise<Response> {
+    const token = await getAuthSessionKey();
+
+    if (token == undefined && endpoint != EndpointEnum.authorizeRoute) {
+      this.reportErrorToUser("Unauthorized action")
+    }
+
     const url = this.getApiUrl(endpoint);
     const fetchOptions = {
       method: "POST",
@@ -75,32 +81,37 @@ export default class ApiService {
     return response;
   }
 
-  private reportErrorToUser(response: Response) {
-    throw new Error("Backend operation failed: " + response.statusText);
+  private reportErrorToUser(errorMessage: string) {
+    throw new Error("Backend operation failed: " + errorMessage);
   }
 
   private async get(endpoint: EndpointEnum): Promise<Response> {
     const url = this.getApiUrl(endpoint);
-
-    let nextOptions = {};
-    if (
-      endpoint in
-      [
-        EndpointEnum.ownOpenReviewsRoute,
-        EndpointEnum.ownDraftsReviewsRoute,
-        EndpointEnum.ownSubmittedReviewsRoute,
-        EndpointEnum.singleReviewRoute,
-      ]
-    ) {
-      nextOptions = {
-        tags: [paperTag],
-      };
-    }
+    const token = await getAuthSessionKey();
+    /*
+        let nextOptions = {};
+        if (
+          endpoint in
+          [
+            EndpointEnum.ownOpenReviewsRoute,
+            EndpointEnum.ownDraftsReviewsRoute,
+            EndpointEnum.ownSubmittedReviewsRoute,
+            EndpointEnum.singleReviewRoute,
+          ]
+        ) {
+          nextOptions = {
+            tags: [paperTag],
+          };
+        }
+    */
 
     const fetchOptions = {
       method: "GET",
-      next: nextOptions,
-      // authorization: bearer
+      // next: nextOptions,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      authorization: `Bearer ${token}`
     };
 
     return await fetch(url, fetchOptions);
