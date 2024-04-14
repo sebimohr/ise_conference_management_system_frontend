@@ -2,9 +2,10 @@ import React from "react";
 import {Button, Card, CardBody, CardFooter, CardHeader, Chip, Divider, Link} from "@nextui-org/react";
 import {PaperDto} from "@/app/api/dataStructure/PaperDto";
 import {DocumentIcon} from "@heroicons/react/24/outline";
+import {ROUTE_REVIEWS} from "@/app/components/home/routes";
 
 export default function PaperCard(props: { paperDto: PaperDto, isReviewable: boolean }) {
-  let redirectURL = (props.paperDto ? '/reviews/review/' : '/paper/') + props.paperDto.id
+  let redirectURL = (props.paperDto ? `${ROUTE_REVIEWS}/review/` : '/paper/') + props.paperDto.id
 
   return (
     <Card
