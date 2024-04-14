@@ -1,9 +1,6 @@
 import {BACKEND_API_BASE_URL} from "@/app/api/Constants";
 import {LoginDto} from "./dataStructure/LoginDto";
-import {PaperDto} from "./dataStructure/PaperDto";
-import {PaperReviewsDto} from "./dataStructure/PaperReviewsDto";
 import {ReviewDto} from "./dataStructure/ReviewDto";
-import {SingleReviewDto} from "./dataStructure/SingleReviewDto";
 import {EndpointEnum} from "./dataStructure/EndpointEnum";
 import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
 
@@ -24,7 +21,7 @@ export default class ApiService {
     return this.post(EndpointEnum.authorizeRoute, loginDto)
   }
 
-  getReviewsEndpoint(reviewState: ReviewStateEnum): Promise<PaperDto[]> {
+  getReviewsEndpoint(reviewState: ReviewStateEnum): Promise<Response> {
     let routeToUse: EndpointEnum;
 
     switch (reviewState) {
@@ -39,19 +36,19 @@ export default class ApiService {
         break;
     }
 
-    return this.get(routeToUse).then(res => res.json())
+    return this.get(routeToUse)
   }
 
-  getSingleReviewEndpoint(paperId: string): Promise<SingleReviewDto> {
-    return this.get(EndpointEnum.singleReviewRoute).then(res => res.json())
+  getSingleReviewEndpoint(paperId: string): Promise<Response> {
+    return this.get(EndpointEnum.singleReviewRoute)
   }
 
-  postReviewEndpoint(reviewDto: ReviewDto): Promise<any> {
+  postReviewEndpoint(reviewDto: ReviewDto): Promise<Response> {
     return this.post(EndpointEnum.singleReviewRoute, reviewDto)
   }
 
-  getPaperReviewsEndpoint(paperId: string): Promise<PaperReviewsDto> {
-    return this.get(EndpointEnum.paperReviewsRoute).then(res => res.json())
+  getPaperReviewsEndpoint(paperId: string): Promise<Response> {
+    return this.get(EndpointEnum.paperReviewsRoute)
   }
 
   private getApiUrl(endpoint: EndpointEnum): string {

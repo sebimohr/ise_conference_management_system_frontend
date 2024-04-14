@@ -15,10 +15,13 @@ import {
 } from "@nextui-org/react";
 import Link from "next/link";
 import {ChevronDownIcon, ChevronRightIcon} from "@heroicons/react/24/outline";
+import {removeAuthSessionKey} from "@/app/api/SessionManagement";
 
 
 export default function NavBar() {
   const [dropDownOpen, setDropDownOpen] = useState(false);
+
+  let userMustLogIn = false; // TODO: should be dynamic
 
   return (
     <Navbar shouldHideOnScroll>
@@ -80,9 +83,17 @@ export default function NavBar() {
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>
-          <Button as={Link} color="primary" href="/login" variant="flat">
-            Sign Out
-          </Button>
+          {userMustLogIn ?
+            <Button as={Link} color="primary" href="/login" variant="flat">
+              Sign In
+            </Button> :
+            <Button as={Link}
+                    color="primary"
+                    onClick={async () => await removeAuthSessionKey()}
+                    href="/login"
+                    variant="flat">
+              Sign Out
+            </Button>}
         </NavbarItem>
       </NavbarContent>
     </Navbar>

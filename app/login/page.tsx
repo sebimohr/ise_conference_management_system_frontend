@@ -8,6 +8,7 @@ import ApiService from "@/app/api/ApiService";
 import {LoginDto} from "@/app/api/dataStructure/LoginDto";
 import LoginMessage from "@/app/components/login/loginMessage";
 import {PressEvent} from "@react-types/shared";
+import {setSessionData} from "@/app/api/SessionManagement";
 
 export default function Page() {
   const apiService = ApiService.getInstance();
@@ -29,11 +30,12 @@ export default function Page() {
       setLoginMessage("Please enter valid inputs");
     } else {
       await apiService.authenticateUserEndpoint(new LoginDto(email, password))
-                      .then(res => {
-                        if (res.status == 404) {
+                      .then(async res => {
+                        if (res.status == 200) {
+                          let token = await res.json()
+                          await setSessionData(token)
+                        } else if (res.status in [401, 404]) {
                           setLoginMessage("Email or Password is wrong.");
-                        } else if (res.status == 200) {
-                          setLoginMessage("Login was successful.");
                         } else {
                           setLoginMessage("Error: " + res.statusText);
                         }
