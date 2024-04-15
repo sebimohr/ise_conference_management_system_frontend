@@ -110,8 +110,8 @@ export default class ApiService {
       // next: nextOptions,
       headers: {
         "Content-Type": "application/json",
-      },
-      authorization: `Bearer ${token}`
+        "Authorization": `Bearer ${token}`
+      }
     };
 
     return await fetch(url, fetchOptions);

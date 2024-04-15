@@ -3,17 +3,16 @@
 import React from "react";
 import {Card, CardBody, CardHeader} from "@nextui-org/react";
 
-export default function ReviewCommentComponent(props: {reviewComment: ReviewComment}) {
+export default function ReviewCommentComponent(props: { reviewComment: string, id: number }) {
   return (
-    <Card key={props.reviewComment.id}>
+    <Card key={props.id} className={"m-4"}>
       <CardHeader>
         <div className={"flex flex-col"}>
-          <p className="text-md">{props.reviewComment.author}</p>
-          <p className="text-small">{props.reviewComment.date.toDateString()}</p>
+          <p className="text-md">Comment #{props.id}</p>
         </div>
       </CardHeader>
       <CardBody>
-        {props.reviewComment.comment}
+        {props.reviewComment}
       </CardBody>
     </Card>
   );

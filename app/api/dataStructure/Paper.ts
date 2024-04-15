@@ -1,4 +1,4 @@
-export class PaperDto {
+export class Paper {
   id: string
   title: string
   authors: string[]
@@ -8,7 +8,7 @@ export class PaperDto {
   submissionDate: Date
   pdf: string
   conference: string
-  reviewerComments: ReviewComment[]
+  reviewerComments: string[]
 
   constructor(id: string,
               title: string,
@@ -19,7 +19,7 @@ export class PaperDto {
               submissionDate: Date,
               pdf: string,
               conference: string,
-              reviewerComments: ReviewComment[]) {
+              reviewerComments: string[]) {
     this.id = id;
     this.title = title;
     this.authors = authors;

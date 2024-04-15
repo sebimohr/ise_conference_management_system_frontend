@@ -1,11 +1,13 @@
 import React from "react";
 import {Button, Card, CardBody, CardFooter, CardHeader, Chip, Divider, Link} from "@nextui-org/react";
-import {PaperDto} from "@/app/api/dataStructure/PaperDto";
 import {DocumentIcon} from "@heroicons/react/24/outline";
 import {ROUTE_REVIEWS} from "@/app/components/home/routes";
+import {ReviewPaperDto} from "@/app/api/dataStructure/ReviewPaperDto";
 
-export default function PaperCard(props: { paperDto: PaperDto, isReviewable: boolean }) {
-  let redirectURL = (props.paperDto ? `${ROUTE_REVIEWS}/review/` : '/paper/') + props.paperDto.id
+export default function PaperCard(props: { reviewPaperDot: ReviewPaperDto, isReviewable: boolean }) {
+  const redirectURL = (props.isReviewable ? `${ROUTE_REVIEWS}/review/` : '/paper/') + props.reviewPaperDot.id
+  const paper = props.reviewPaperDot.paper
+
 
   return (
     <Card
@@ -18,19 +20,18 @@ export default function PaperCard(props: { paperDto: PaperDto, isReviewable: boo
           radius="sm"
         />
         <div className="flex flex-col ps-2 gap-2">
-          <p className="text-md">{props.paperDto.title}</p>
+          <p className="text-md">{paper.title}</p>
           <div className="flex flex-row gap-2">
-            {props.paperDto
-                  .keywords
+            {paper.keywords
                   .map(keyword => <Chip key={keyword} variant="flat">{keyword}</Chip>)
             }
           </div>
-          <p className={"text-sm text-start"}>Author: {props.paperDto.submissionAuthor}</p>
+          <p className={"text-sm text-start"}>Author: {paper.submissionAuthor}</p>
         </div>
       </CardHeader>
       <Divider/>
       <CardBody>
-        <p className={"text-sm"}>{props.paperDto.paperAbstract}</p>
+        <p className={"text-sm"}>{paper.paperAbstract}</p>
         {/*  TODO: add rating when props.isReviewable is false */}
       </CardBody>
       <CardFooter className={"h-16"}>

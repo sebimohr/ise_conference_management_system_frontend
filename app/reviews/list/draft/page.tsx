@@ -1,12 +1,16 @@
 import React from "react";
 import ReviewListPage from "@/app/components/review/reviewListPage";
 import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
+import {getReviewList} from "@/app/helpers/fetchReviewHelper";
 
+const pageState = ReviewStateEnum.draft
 
-export default function Page() {
+export default async function Page() {
+  const data = await getReviewList(pageState)
+
   return (
     <div>
-      <ReviewListPage state={ReviewStateEnum.draft}/>
+      <ReviewListPage state={pageState} paperList={data}/>
     </div>
   );
 }
