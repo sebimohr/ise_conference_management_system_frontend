@@ -9,9 +9,9 @@ import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
 import ApiService from "@/app/api/ApiService";
 
 export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
-  const [rating, setRating] = useState(props.currentReview.rating);
-  const [reviewDetails, setReviewDetails] = useState(props.currentReview.reviewDetails);
-  const [reviewComment, setReviewComment] = useState(props.currentReview.reviewComment);
+  const [rating, setRating] = useState(props.currentReview.rating ?? 0);
+  const [reviewDetails, setReviewDetails] = useState(props.currentReview.reviewDetails ?? "");
+  const [reviewComment, setReviewComment] = useState(props.currentReview.reviewComment ?? "");
 
   const [isPosting, setIsPosting] = useState(false);
 
@@ -38,13 +38,13 @@ export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
   const sendPostRequestForReviewToBackend = (reviewState: ReviewStateEnum) => {
     setIsPosting(true);
     ApiService.getInstance().postReviewEndpoint(new ReviewDto(
-      "",
+      props.currentReview.paper.id,
       new Date(),
       rating,
       reviewDetails,
       reviewComment,
       reviewState
-    )).then(() => {
+    ), props.currentReview.id).then(() => {
       setIsPosting(false);
       // TODO: notify user about progress
     });

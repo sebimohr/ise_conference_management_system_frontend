@@ -8,7 +8,8 @@ export class ReviewPaperDto {
               rating: number,
               reviewDetails: string,
               reviewComment: string,
-              reviewState: ReviewStateEnum) {
+              reviewState: ReviewStateEnum,
+              user?: ReviewAuthor) {
     this.id = id;
     this.paper = paper;
     this.reviewDate = reviewDate;
@@ -16,6 +17,7 @@ export class ReviewPaperDto {
     this.reviewDetails = reviewDetails;
     this.reviewComment = reviewComment;
     this.reviewState = reviewState;
+    this.user = user;
   }
 
   id: string
@@ -24,5 +26,6 @@ export class ReviewPaperDto {
   rating: number
   reviewDetails: string
   reviewComment: string // the comment of the current reviewer
+  user?: ReviewAuthor
   reviewState: ReviewStateEnum
 }

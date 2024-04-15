@@ -40,78 +40,64 @@ export default class ApiService {
     return this.get(routeToUse);
   }
 
-  getSingleReviewEndpoint(paperId: string): Promise<Response> {
-    return this.get(EndpointEnum.singleReviewRoute);
+  getSingleReviewEndpoint(reviewId: string): Promise<Response> {
+    return this.get(EndpointEnum.singleReviewRoute, reviewId);
   }
 
-  postReviewEndpoint(reviewDto: ReviewDto): Promise<Response> {
-    return this.post(EndpointEnum.singleReviewRoute, reviewDto);
+  postReviewEndpoint(reviewDto: ReviewDto, reviewId: string): Promise<Response> {
+    return this.post(EndpointEnum.singleReviewRoute, reviewDto, reviewId);
   }
 
   getPaperReviewsEndpoint(paperId: string): Promise<Response> {
-    return this.get(EndpointEnum.paperRoute);
+    return this.get(EndpointEnum.paperReviewsRoute, paperId);
   }
 
-  private getApiUrl(endpoint: EndpointEnum): string {
-    return `${BACKEND_API_BASE_URL}${endpoint.valueOf()}`;
+  private getApiUrl(endpoint: EndpointEnum, reviewId?: string): string {
+    return `${BACKEND_API_BASE_URL}${endpoint.valueOf()}${reviewId ? `/${reviewId}` : ""}`;
   }
 
   private async post(
     endpoint: EndpointEnum,
-    data: any = null
+    data: any = null,
+    reviewId?: string
   ): Promise<Response> {
     const token = await getAuthSessionKey();
-
     if (token == undefined && endpoint != EndpointEnum.authorizeRoute) {
       this.reportErrorToUser("Unauthorized action")
     }
 
-    const url = this.getApiUrl(endpoint);
+    const url = this.getApiUrl(endpoint, reviewId);
+    const header = new Headers();
+    header.set("Content-Type", "application/json");
+
+    if (endpoint != EndpointEnum.authorizeRoute) {
+      header.set("Authorization", `Bearer ${token}`)
+    }
+
     const fetchOptions = {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: header,
       body: JSON.stringify(data),
     };
-    // noinspection UnnecessaryLocalVariableJS
-    const response = await fetch(url, fetchOptions);
 
-    // revalidateTag(paperTag); // TODO: only invalidate cache on new review post
-    return response;
+    return await fetch(url, fetchOptions);
   }
 
   private reportErrorToUser(errorMessage: string) {
     throw new Error("Backend operation failed: " + errorMessage);
   }
 
-  private async get(endpoint: EndpointEnum): Promise<Response> {
-    const url = this.getApiUrl(endpoint);
+  private async get(endpoint: EndpointEnum, reviewId?: string): Promise<Response> {
+    const url = this.getApiUrl(endpoint, reviewId);
     const token = await getAuthSessionKey();
-    /*
-        let nextOptions = {};
-        if (
-          endpoint in
-          [
-            EndpointEnum.ownOpenReviewsRoute,
-            EndpointEnum.ownDraftsReviewsRoute,
-            EndpointEnum.ownSubmittedReviewsRoute,
-            EndpointEnum.singleReviewRoute,
-          ]
-        ) {
-          nextOptions = {
-            tags: [paperTag],
-          };
-        }
-    */
+
+    const header = new Headers();
+    header.set("Content-Type", "application/json");
+    header.set("Authorization", `Bearer ${token}`)
 
     const fetchOptions = {
       method: "GET",
-      // next: nextOptions,
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      }
+      headers: header
     };
 
     return await fetch(url, fetchOptions);
