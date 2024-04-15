@@ -9,9 +9,7 @@ export async function getReviewList(state: ReviewStateEnum) {
 
   checkIfResponseIsOk(res)
 
-  const data = await res.json() as ReviewPaperDto[]
-
-  return data
+  return await res.json() as ReviewPaperDto[]
 }
 
 export async function getSingleReview(reviewId: string) {
@@ -41,6 +39,14 @@ export async function getSingleReview(reviewId: string) {
   })
 
   return reviewData
+}
+
+export async function getPaperWithAllReviews(paperId: string) {
+  const res = await apiService.getPaperReviewsEndpoint(paperId)
+
+  checkIfResponseIsOk(res);
+
+  return await res.json() as ReviewPaperDto[]
 }
 
 function checkIfResponseIsOk(res: Response) {

@@ -12,7 +12,7 @@ export default function ReviewPaperList(props: { reviewState: ReviewStateEnum, p
     <div className={"grid mt-8 w-full gap-4 place-content-stretch lg:grid-cols-2"}>
       {props.paperList.map(paperDto =>
                              <PaperCard key={paperDto.id}
-                                        reviewPaperDot={paperDto}
+                                        reviewPaperDto={paperDto}
                                         isReviewable={isReviewable}/>
       )}
     </div>
