@@ -8,7 +8,6 @@ export default function PaperCard(props: { reviewPaperDot: ReviewPaperDto, isRev
   const redirectURL = (props.isReviewable ? `${ROUTE_REVIEWS}/review/` : '/paper/') + props.reviewPaperDot.id
   const paper = props.reviewPaperDot.paper
 
-
   return (
     <Card
       className="w-full space-y-5 p-4"

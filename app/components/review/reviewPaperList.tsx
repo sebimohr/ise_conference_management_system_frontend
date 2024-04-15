@@ -3,10 +3,7 @@
 import React from "react";
 import PaperCard from "@/app/components/review/paperCard";
 import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
-import ApiService from "@/app/api/ApiService";
 import {ReviewPaperDto} from "@/app/api/dataStructure/ReviewPaperDto";
-
-const apiService = ApiService.getInstance()
 
 export default function ReviewPaperList(props: { reviewState: ReviewStateEnum, paperList: ReviewPaperDto[] }) {
   const isReviewable = props.reviewState in [ReviewStateEnum.draft, ReviewStateEnum.open];

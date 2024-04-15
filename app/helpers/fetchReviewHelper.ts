@@ -10,7 +10,6 @@ export async function getReviewList(state: ReviewStateEnum) {
   checkIfResponseIsOk(res)
 
   const data = await res.json() as ReviewPaperDto[]
-  console.log(data)
 
   return data
 }
@@ -32,9 +31,9 @@ export async function getSingleReview(reviewId: string) {
   allPaperReviewsData.forEach(reviewPaper => {
     // Only add the reviewComment when review is not the currently viewed one and review is already submitted
     if (
-      // reviewPaper.id != reviewData.id
+      reviewPaper.id != reviewData.id
       // && reviewPaper.reviewState == ReviewStateEnum.submitted
-      /*&&*/ reviewPaper.reviewComment?.length > 0) {
+      && reviewPaper.reviewComment?.length > 0) {
       if (!reviewData.paper.reviewerComments)
         reviewData.paper.reviewerComments = []
       reviewData.paper.reviewerComments.push(reviewPaper.reviewComment);

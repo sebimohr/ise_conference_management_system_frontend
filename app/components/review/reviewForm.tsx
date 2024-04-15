@@ -7,6 +7,8 @@ import {ReviewPaperDto} from "@/app/api/dataStructure/ReviewPaperDto";
 import ReviewCommentsModal from "@/app/components/review/reviewCommentsModal";
 import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
 import ApiService from "@/app/api/ApiService";
+import {SeverityEnum} from "@/app/helpers/errorHandler";
+import Snackbar from "@/app/components/home/snackbar";
 
 export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
   const [rating, setRating] = useState(props.currentReview.rating ?? 0);
@@ -27,6 +29,16 @@ export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
     setRating(ratingValueNumber);
   }
 
+  const [messageIsVisible, setMessageIsVisible] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+  const [messageSeverity, setMessageSeverity] = React.useState(SeverityEnum.success);
+
+  const showClientMessage = (message: string, severity: SeverityEnum) => {
+    setMessageIsVisible(true)
+    setMessage(message)
+    setMessageSeverity(severity)
+  }
+
   const handleSaveDraft = () => {
     sendPostRequestForReviewToBackend(ReviewStateEnum.draft);
   };
@@ -44,14 +56,18 @@ export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
       reviewDetails,
       reviewComment,
       reviewState
-    ), props.currentReview.id).then(() => {
+    ), props.currentReview.id).then(res => {
+      if (!res.ok)
+        showClientMessage("Something went wrong!", SeverityEnum.error);
+      else
+        showClientMessage("Successfully submitted!" + (reviewState == ReviewStateEnum.draft ? "(Draft)" : ""),
+                          SeverityEnum.success)
       setIsPosting(false);
-      // TODO: notify user about progress
     });
   }
 
   return (
-    <div className="space-y-8">
+    <div className="gap-8">
       <Slider
         size="lg"
         label="Rating"
@@ -81,7 +97,7 @@ export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
         value={reviewDetails}
         onValueChange={(val) => setReviewDetails(val)}
       />
-      <div className="flex-rowa space-x-4">
+      <div className="flex-rowa space-x-4 mb-8">
         <Textarea
           isDisabled={isPosting}
           className="w-full"
@@ -94,12 +110,12 @@ export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
           value={reviewComment}
           onValueChange={(val) => setReviewComment(val)}
         />
-        <Button onPress={onOpen}>Comments</Button>
+        <Button onPress={onOpen}>Other Reviewers Comments</Button>
         <ReviewCommentsModal isOpen={isOpen}
                              onOpenChange={onOpenChange}
                              reviewComments={props.currentReview.paper.reviewerComments}/>
       </div>
-      <div className="flex w-full justify-between">
+      <div className="flex w-full justify-between mb-8">
         <Button
           isLoading={isPosting}
           onClick={handleSaveDraft}>
@@ -111,7 +127,7 @@ export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
           Submit
         </Button>
       </div>
+      <Snackbar message={message} isVisible={messageIsVisible} severity={messageSeverity}/>
     </div>
-  )
-    ;
+  );
 }
