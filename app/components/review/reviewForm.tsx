@@ -3,18 +3,17 @@
 import React, {useState} from "react";
 import {Button, Slider, Textarea, useDisclosure} from "@nextui-org/react";
 import {ReviewDto} from "@/app/api/dataStructure/ReviewDto";
-import {SingleReviewDto} from "@/app/api/dataStructure/SingleReviewDto";
+import {ReviewPaperDto} from "@/app/api/dataStructure/ReviewPaperDto";
 import ReviewCommentsModal from "@/app/components/review/reviewCommentsModal";
 import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
 import ApiService from "@/app/api/ApiService";
 
-export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
-  const apiServiceInstance = ApiService.getInstance();
+export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
+  const [rating, setRating] = useState(props.currentReview.rating ?? 0);
+  const [reviewDetails, setReviewDetails] = useState(props.currentReview.reviewDetails ?? "");
+  const [reviewComment, setReviewComment] = useState(props.currentReview.reviewComment ?? "");
 
-  const [rating, setRating] = useState(0);
-  const [review, setReview] = useState('');
-  const [comment, setComment] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPosting, setIsPosting] = useState(false);
 
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
@@ -37,19 +36,18 @@ export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
   };
 
   const sendPostRequestForReviewToBackend = (reviewState: ReviewStateEnum) => {
-    setIsLoading(true);
+    setIsPosting(true);
     ApiService.getInstance().postReviewEndpoint(new ReviewDto(
-      "",
+      props.currentReview.paper.id,
       new Date(),
       rating,
-      review,
-      comment,
+      reviewDetails,
+      reviewComment,
       reviewState
-    )).then(() => {
-              setIsLoading(false);
-              // TODO: notify user about progress
-            }
-    );
+    ), props.currentReview.id).then(() => {
+      setIsPosting(false);
+      // TODO: notify user about progress
+    });
   }
 
   return (
@@ -57,11 +55,12 @@ export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
       <Slider
         size="lg"
         label="Rating"
+        isDisabled={isPosting}
         showSteps={true}
         step={1}
         maxValue={2}
         minValue={-2}
-        // fillOffset={0}
+        fillOffset={0}
         defaultValue={rating}
         onChange={handleRatingSliderInput}
         classNames={{
@@ -71,6 +70,7 @@ export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
       />
       <Textarea
         isRequired
+        isDisabled={isPosting}
         className="w-full"
         label="Review"
         labelPlacement="outside"
@@ -78,11 +78,12 @@ export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
         minRows={3}
         maxRows={8}
         description="Your review will be displayed to everyone with access to the paper."
-        value={review}
-        onValueChange={(val) => setReview(val)}
+        value={reviewDetails}
+        onValueChange={(val) => setReviewDetails(val)}
       />
       <div className="flex-rowa space-x-4">
         <Textarea
+          isDisabled={isPosting}
           className="w-full"
           label="Comment"
           labelPlacement="outside"
@@ -90,8 +91,8 @@ export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
           minRows={1}
           maxRows={3}
           description="Your comment will only be visible by other reviewers."
-          value={comment}
-          onValueChange={(val) => setComment(val)}
+          value={reviewComment}
+          onValueChange={(val) => setReviewComment(val)}
         />
         <Button onPress={onOpen}>Comments</Button>
         <ReviewCommentsModal isOpen={isOpen}
@@ -100,12 +101,12 @@ export default function ReviewForm(props: { currentReview: SingleReviewDto }) {
       </div>
       <div className="flex w-full justify-between">
         <Button
-          isLoading={isLoading}
+          isLoading={isPosting}
           onClick={handleSaveDraft}>
           Save Draft
         </Button>
         <Button
-          isLoading={isLoading}
+          isLoading={isPosting}
           onClick={handleSubmit}>
           Submit
         </Button>

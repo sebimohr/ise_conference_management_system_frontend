@@ -1,8 +1,9 @@
 import {BACKEND_API_BASE_URL} from "@/app/api/Constants";
-import {LoginDto} from "./dataStructure/LoginDto";
+import {UserDto} from "./dataStructure/UserDto";
 import {ReviewDto} from "./dataStructure/ReviewDto";
 import {EndpointEnum} from "./dataStructure/EndpointEnum";
 import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
+import {getAuthSessionKey} from "@/app/api/SessionManagement";
 
 const paperTag: string = "paperCache";
 
@@ -17,8 +18,8 @@ export default class ApiService {
     return ApiService.instance;
   }
 
-  authenticateUserEndpoint(loginDto: LoginDto): Promise<Response> {
-    return this.post(EndpointEnum.authorizeRoute, loginDto)
+  authenticateUserEndpoint(loginDto: UserDto): Promise<Response> {
+    return this.post(EndpointEnum.authorizeRoute, loginDto);
   }
 
   getReviewsEndpoint(reviewState: ReviewStateEnum): Promise<Response> {
@@ -36,63 +37,67 @@ export default class ApiService {
         break;
     }
 
-    return this.get(routeToUse)
+    return this.get(routeToUse);
   }
 
-  getSingleReviewEndpoint(paperId: string): Promise<Response> {
-    return this.get(EndpointEnum.singleReviewRoute)
+  getSingleReviewEndpoint(reviewId: string): Promise<Response> {
+    return this.get(EndpointEnum.singleReviewRoute, reviewId);
   }
 
-  postReviewEndpoint(reviewDto: ReviewDto): Promise<Response> {
-    return this.post(EndpointEnum.singleReviewRoute, reviewDto)
+  postReviewEndpoint(reviewDto: ReviewDto, reviewId: string): Promise<Response> {
+    return this.post(EndpointEnum.singleReviewRoute, reviewDto, reviewId);
   }
 
   getPaperReviewsEndpoint(paperId: string): Promise<Response> {
-    return this.get(EndpointEnum.paperReviewsRoute)
+    return this.get(EndpointEnum.paperReviewsRoute, paperId);
   }
 
-  private getApiUrl(endpoint: EndpointEnum): string {
-    return `${BACKEND_API_BASE_URL}${endpoint.valueOf()}`
+  private getApiUrl(endpoint: EndpointEnum, reviewId?: string): string {
+    return `${BACKEND_API_BASE_URL}${endpoint.valueOf()}${reviewId ? `/${reviewId}` : ""}`;
   }
 
-  private async post(endpoint: EndpointEnum, data: any = null): Promise<Response> {
-    const url = this.getApiUrl(endpoint);
-    const fetchOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    };
-    // noinspection UnnecessaryLocalVariableJS
-    const response = await fetch(url, fetchOptions);
+  private async post(
+    endpoint: EndpointEnum,
+    data: any = null,
+    reviewId?: string
+  ): Promise<Response> {
+    const token = await getAuthSessionKey();
+    if (token == undefined && endpoint != EndpointEnum.authorizeRoute) {
+      this.reportErrorToUser("Unauthorized action")
+    }
 
-    // revalidateTag(paperTag); // TODO: only invalidate cache on new review post
-    return response;
-  }
+    const url = this.getApiUrl(endpoint, reviewId);
+    const header = new Headers();
+    header.set("Content-Type", "application/json");
 
-  private reportErrorToUser(response: Response) {
-    throw new Error('Backend operation failed: ' + response.statusText)
-  }
-
-  private async get(endpoint: EndpointEnum): Promise<Response> {
-    const url = this.getApiUrl(endpoint);
-
-    let nextOptions = {};
-    if (endpoint in [
-      EndpointEnum.ownOpenReviewsRoute,
-      EndpointEnum.ownDraftsReviewsRoute,
-      EndpointEnum.ownSubmittedReviewsRoute,
-      EndpointEnum.singleReviewRoute,
-    ]) {
-      nextOptions = {
-        tags: [paperTag]
-      };
+    if (endpoint != EndpointEnum.authorizeRoute) {
+      header.set("Authorization", `Bearer ${token}`)
     }
 
     const fetchOptions = {
-      method: 'GET',
-      next: nextOptions,
+      method: "POST",
+      headers: header,
+      body: JSON.stringify(data),
+    };
+
+    return await fetch(url, fetchOptions);
+  }
+
+  private reportErrorToUser(errorMessage: string) {
+    throw new Error("Backend operation failed: " + errorMessage);
+  }
+
+  private async get(endpoint: EndpointEnum, reviewId?: string): Promise<Response> {
+    const url = this.getApiUrl(endpoint, reviewId);
+    const token = await getAuthSessionKey();
+
+    const header = new Headers();
+    header.set("Content-Type", "application/json");
+    header.set("Authorization", `Bearer ${token}`)
+
+    const fetchOptions = {
+      method: "GET",
+      headers: header
     };
 
     return await fetch(url, fetchOptions);

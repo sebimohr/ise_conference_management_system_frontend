@@ -5,7 +5,7 @@ import {Button, Input} from "@nextui-org/react";
 import {EyeFilledIcon, EyeSlashFilledIcon} from "@nextui-org/shared-icons";
 import {EnvelopeIcon, LockClosedIcon} from "@heroicons/react/20/solid";
 import ApiService from "@/app/api/ApiService";
-import {LoginDto} from "@/app/api/dataStructure/LoginDto";
+import {UserDto} from "@/app/api/dataStructure/UserDto";
 import LoginMessage from "@/app/components/login/loginMessage";
 import {PressEvent} from "@react-types/shared";
 import {setSessionData} from "@/app/api/SessionManagement";
@@ -29,11 +29,12 @@ export default function Page() {
     if (password.length < 1 || email.length < 1) {
       setLoginMessage("Please enter valid inputs");
     } else {
-      await apiService.authenticateUserEndpoint(new LoginDto(email, password))
+      await apiService.authenticateUserEndpoint(new UserDto(email, password))
                       .then(async res => {
                         if (res.status == 200) {
-                          let token = await res.json()
-                          await setSessionData(token)
+                          let token = await res.json() as AuthorizationDto
+                          setLoginMessage("Successfully logged in.")
+                          await setSessionData(token.auth_token)
                         } else if (res.status in [401, 404]) {
                           setLoginMessage("Email or Password is wrong.");
                         } else {
