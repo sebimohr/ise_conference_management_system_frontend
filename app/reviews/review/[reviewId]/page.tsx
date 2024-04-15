@@ -1,25 +1,17 @@
-'use client'
-
-import React, {useEffect} from "react";
-import PdfView from "@/app/components/review/pdfView";
+import React from "react";
 import ReviewForm from "@/app/components/review/reviewForm";
-import {GET} from "@/app/reviews/review/route";
-import {ReviewPaperDto} from "@/app/api/dataStructure/ReviewPaperDto";
-import ApiServiceMock from "@/app/api/ApiServiceMock";
+import {getSingleReview} from "@/app/helpers/fetchReviewHelper";
+import dynamic from "next/dynamic";
 
-export default function Page({params}: { params: { reviewId: string } }) {
-  const currentReviewDto = ApiServiceMock.singleReviewMock;
+// importing pdfViewer component dynamically, as it's a client component
+const PdfViewerClient = dynamic(() => import ("@/app/components/review/pdfView"), {ssr: false})
 
-  useEffect(() => {
-    GET(params.reviewId).then(async res => {
-      let data = await res.json() as ReviewPaperDto
-      console.log(data)
-    })
-  })
+export default async function Page({params}: { params: { reviewId: string } }) {
+  const currentReviewDto = await getSingleReview(params.reviewId)
 
   return (
     <div className="grid w-full space-x-4 lg:grid-cols-2">
-      <PdfView paper={currentReviewDto.paper.pdf}/> {/* TODO: replace paper with pdf, also in component*/}
+      <PdfViewerClient paper={currentReviewDto.paper.pdf}/>
       <ReviewForm currentReview={currentReviewDto}/>
     </div>
   );
