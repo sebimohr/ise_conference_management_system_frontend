@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React, {useState} from "react";
 import {Button, Slider, Textarea, useDisclosure} from "@nextui-org/react";
@@ -7,9 +7,12 @@ import {ReviewPaperDto} from "@/app/api/dataStructure/ReviewPaperDto";
 import ReviewCommentsModal from "@/app/components/review/reviewCommentsModal";
 import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
 import ApiService from "@/app/api/ApiService";
-import {SeverityEnum} from "@/app/helpers/errorHandler";
 import Snackbar from "@/app/components/home/snackbar";
+import {SeverityEnum} from "@/app/api/dataStructure/severityEnum";
 
+/**
+ * The form where a reviewer can input their review data.
+ */
 export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
   const initialRating = () => {
     if (!props.currentReview.rating) {
@@ -19,13 +22,17 @@ export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
     } else if (props.currentReview.rating > 2) {
       return 2;
     } else {
-      return props.currentReview.rating
+      return props.currentReview.rating;
     }
-  }
+  };
 
   const [rating, setRating] = useState(initialRating());
-  const [reviewDetails, setReviewDetails] = useState(props.currentReview.reviewDetails ?? "");
-  const [reviewComment, setReviewComment] = useState(props.currentReview.reviewComment ?? "");
+  const [reviewDetails, setReviewDetails] = useState(
+    props.currentReview.reviewDetails ?? ""
+  );
+  const [reviewComment, setReviewComment] = useState(
+    props.currentReview.reviewComment ?? ""
+  );
 
   const [isPosting, setIsPosting] = useState(false);
 
@@ -40,17 +47,19 @@ export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
     }
 
     setRating(ratingValueNumber);
-  }
+  };
 
   const [messageIsVisible, setMessageIsVisible] = React.useState(false);
   const [message, setMessage] = React.useState("");
-  const [messageSeverity, setMessageSeverity] = React.useState(SeverityEnum.success);
+  const [messageSeverity, setMessageSeverity] = React.useState(
+    SeverityEnum.success
+  );
 
   const showClientMessage = (message: string, severity: SeverityEnum) => {
-    setMessageIsVisible(true)
-    setMessage(message)
-    setMessageSeverity(severity)
-  }
+    setMessageIsVisible(true);
+    setMessage(message);
+    setMessageSeverity(severity);
+  };
 
   const handleSaveDraft = () => {
     sendPostRequestForReviewToBackend(ReviewStateEnum.draft);
@@ -62,26 +71,33 @@ export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
 
   const sendPostRequestForReviewToBackend = (reviewState: ReviewStateEnum) => {
     setIsPosting(true);
-    ApiService.getInstance().putPapersReviewEndpoint(new ReviewDto(
-      props.currentReview.paper.id,
-      new Date(),
-      rating,
-      reviewDetails,
-      reviewComment,
-      reviewState
-    ), props.currentReview.id).then(res => {
-      if (!res.ok)
-        showClientMessage("Something went wrong!", SeverityEnum.error);
-      else
-        showClientMessage("Successfully submitted!" + (reviewState == ReviewStateEnum.draft ?
-          "(Draft)" :
-          "Please navigate back to the homes screen."),
-                          SeverityEnum.success)
+    ApiService.getInstance()
+              .putPapersReviewEndpoint(
+                new ReviewDto(
+                  props.currentReview.paper.id,
+                  new Date(),
+                  rating,
+                  reviewDetails,
+                  reviewComment,
+                  reviewState
+                ),
+                props.currentReview.id
+              )
+              .then((res) => {
+                if (!res.ok)
+                  showClientMessage("Something went wrong!", SeverityEnum.error);
+                else
+                  showClientMessage(
+                    "Successfully submitted!" +
+                    (reviewState == ReviewStateEnum.draft
+                      ? "(Draft)"
+                      : "Please navigate back to the homes screen."),
+                    SeverityEnum.success
+                  );
 
-      if (reviewState != ReviewStateEnum.submitted)
-        setIsPosting(false);
-    });
-  }
+                if (reviewState != ReviewStateEnum.submitted) setIsPosting(false);
+              });
+  };
 
   return (
     <div className="gap-8">
@@ -94,8 +110,8 @@ export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
         maxValue={2}
         minValue={-2}
         fillOffset={0}
-        onChange={val => handleRatingSliderInput(val)}
-        color={rating < 0 ? "danger" : (rating == 0 ? "warning" : "success")}
+        onChange={(val) => handleRatingSliderInput(val)}
+        color={rating < 0 ? "danger" : rating == 0 ? "warning" : "success"}
         classNames={{
           base: "w-full",
         }}
@@ -127,23 +143,25 @@ export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
           onValueChange={(val) => setReviewComment(val)}
         />
         <Button onPress={onOpen}>Other Reviewers Comments</Button>
-        <ReviewCommentsModal isOpen={isOpen}
-                             onOpenChange={onOpenChange}
-                             reviewComments={props.currentReview.paper.reviewerComments}/>
+        <ReviewCommentsModal
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          reviewComments={props.currentReview.paper.reviewerComments}
+        />
       </div>
       <div className="flex w-full justify-between mb-8">
-        <Button
-          isLoading={isPosting}
-          onClick={handleSaveDraft}>
+        <Button isLoading={isPosting} onClick={handleSaveDraft}>
           Save Draft
         </Button>
-        <Button
-          isLoading={isPosting}
-          onClick={handleSubmit}>
+        <Button isLoading={isPosting} onClick={handleSubmit}>
           Submit
         </Button>
       </div>
-      <Snackbar message={message} isVisible={messageIsVisible} severity={messageSeverity}/>
+      <Snackbar
+        message={message}
+        isVisible={messageIsVisible}
+        severity={messageSeverity}
+      />
     </div>
   );
 }

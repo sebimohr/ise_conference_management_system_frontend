@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Dropdown,
@@ -11,42 +11,49 @@ import {
   Navbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem
+  NavbarItem,
 } from "@nextui-org/react";
 import Link from "next/link";
-import {ChevronDownIcon, ChevronRightIcon} from "@heroicons/react/24/outline";
-import {getAuthSessionKey, removeAuthSessionKey} from "@/app/api/SessionManagement";
-import {ROUTE_HOME, ROUTE_LOGIN, ROUTE_REVIEWS} from "@/app/components/home/routes";
-import {usePathname} from "next/navigation";
+import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import {
+  getAuthSessionKey,
+  removeAuthSessionKey,
+} from "@/app/api/SessionManagement";
+import {
+  ROUTE_HOME,
+  ROUTE_LOGIN,
+  ROUTE_REVIEWS,
+} from "@/app/components/home/routes";
+import { usePathname } from "next/navigation";
 
-
+/**
+ * @returns The NavBar component.
+ */
 export default function NavBar() {
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userIsLoggedIn, setUserIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    getAuthSessionKey().then(val => {
-      setLoading(true)
-      setUserIsLoggedIn(val != undefined)
-      setLoading(false)
-    })
+    getAuthSessionKey().then((val) => {
+      setLoading(true);
+      setUserIsLoggedIn(val != undefined);
+      setLoading(false);
+    });
   });
 
   return (
     <Navbar shouldHideOnScroll>
-      <NavbarBrand>
-        <Image className="h-16" alt="reviewer_logo" src="/logo.webp"/>
+      <NavbarBrand className={"hidden sm:flex"}>
+        <Image className="h-16" alt="reviewer_logo" src="/logo.webp" />
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4 space-x-4" justify="center">
+      <NavbarContent className="gap-4 space-x-4" justify="center">
         <NavbarItem isActive={usePathname() == ROUTE_HOME}>
           <Link color="foreground" aria-current="page" href={ROUTE_HOME}>
             Home
           </Link>
         </NavbarItem>
-        <Dropdown
-          onOpenChange={setDropDownOpen}
-        >
+        <Dropdown onOpenChange={setDropDownOpen}>
           <NavbarItem>
             <DropdownTrigger>
               <Button
@@ -54,9 +61,15 @@ export default function NavBar() {
                 className="p-0 bg-transparent data-[hover=true]:bg-transparent"
                 radius="sm"
                 variant="light"
-                endContent={dropDownOpen ? <ChevronDownIcon/> : <ChevronRightIcon/>}
+                endContent={
+                  dropDownOpen ? <ChevronDownIcon /> : <ChevronRightIcon />
+                }
               >
-                {usePathname().startsWith(ROUTE_REVIEWS) ? <b>Reviews</b> : "Reviews"}
+                {usePathname().startsWith(ROUTE_REVIEWS) ? (
+                  <b>Reviews</b>
+                ) : (
+                  "Reviews"
+                )}
               </Button>
             </DropdownTrigger>
           </NavbarItem>
@@ -92,24 +105,33 @@ export default function NavBar() {
         </Dropdown>
       </NavbarContent>
       <NavbarContent justify="end">
-        {!loading ?
+        {!loading ? (
           <NavbarItem>
-            {userIsLoggedIn ?
-              <Button as={Link}
-                      color="primary"
-                      onClick={async () => await removeAuthSessionKey()}
-                      href={ROUTE_LOGIN}
-                      variant="flat">
+            {userIsLoggedIn ? (
+              <Button
+                as={Link}
+                color="primary"
+                onClick={async () => await removeAuthSessionKey()}
+                href={ROUTE_LOGIN}
+                variant="flat"
+              >
                 Sign Out
-              </Button> :
-              <Button as={Link} color="primary" href={ROUTE_LOGIN} variant="flat">
+              </Button>
+            ) : (
+              <Button
+                as={Link}
+                color="primary"
+                href={ROUTE_LOGIN}
+                variant="flat"
+              >
                 Sign In
               </Button>
-            }
-          </NavbarItem> :
+            )}
+          </NavbarItem>
+        ) : (
           <></>
-        }
+        )}
       </NavbarContent>
     </Navbar>
-  )
+  );
 }

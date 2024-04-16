@@ -1,16 +1,20 @@
-'use client'
+"use client";
 
 import React from "react";
-import {Button, Input} from "@nextui-org/react";
-import {EyeFilledIcon, EyeSlashFilledIcon} from "@nextui-org/shared-icons";
-import {EnvelopeIcon, LockClosedIcon} from "@heroicons/react/20/solid";
+import { Button, Input } from "@nextui-org/react";
+import { EyeFilledIcon, EyeSlashFilledIcon } from "@nextui-org/shared-icons";
+import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/20/solid";
 import ApiService from "@/app/api/ApiService";
-import {UserDto} from "@/app/api/dataStructure/UserDto";
-import {PressEvent} from "@react-types/shared";
-import {setSessionData} from "@/app/api/SessionManagement";
+import { UserDto } from "@/app/api/dataStructure/UserDto";
+import { PressEvent } from "@react-types/shared";
+import { setSessionData } from "@/app/api/SessionManagement";
 import Snackbar from "@/app/components/home/snackbar";
-import {SeverityEnum} from "@/app/helpers/errorHandler";
 
+import { SeverityEnum } from "@/app/api/dataStructure/severityEnum";
+
+/**
+ * The login page.
+ */
 export default function Page() {
   const apiService = ApiService.getInstance();
 
@@ -25,40 +29,43 @@ export default function Page() {
 
   const [messageIsVisible, setMessageIsVisible] = React.useState(false);
   const [loginMessage, setLoginMessage] = React.useState("");
-  const [messageSeverity, setMessageSeverity] = React.useState(SeverityEnum.success);
+  const [messageSeverity, setMessageSeverity] = React.useState(
+    SeverityEnum.success
+  );
 
-  const togglePasswordVisibility = () => setPasswordIsVisible(!passwordIsVisible);
+  const togglePasswordVisibility = () =>
+    setPasswordIsVisible(!passwordIsVisible);
 
   const showLoginMessage = (message: string, severity: SeverityEnum) => {
-    setMessageIsVisible(true)
-    setLoginMessage(message)
-    setMessageSeverity(severity)
+    setMessageIsVisible(true);
+    setLoginMessage(message);
+    setMessageSeverity(severity);
     if (severity == SeverityEnum.success) {
       setIsDisabled(true);
     }
-  }
+  };
 
   const submitLoginForm = async (e: PressEvent) => {
     setIsLoading(true);
     if (password.length < 1 || email.length < 1) {
       setLoginMessage("Please enter valid inputs");
     } else {
-      await apiService.authenticateUserEndpoint(new UserDto(email, password))
-                      .then(async res => {
-                        if (res.status == 200) {
-                          let token = await res.json() as AuthorizationDto
-                          showLoginMessage("Successfully logged in.", SeverityEnum.success)
-                          await setSessionData(token.auth_token)
-                        } else if (res.status == 401) {
-                          showLoginMessage("Email or Password is wrong.", SeverityEnum.error);
-                        } else {
-                          showLoginMessage("Error: " + res.statusText, SeverityEnum.fatal);
-                        }
-                      });
+      await apiService
+        .authenticateUserEndpoint(new UserDto(email, password))
+        .then(async (res) => {
+          if (res.status == 200) {
+            let token = (await res.json()) as AuthorizationDto;
+            showLoginMessage("Successfully logged in.", SeverityEnum.success);
+            await setSessionData(token.auth_token);
+          } else if (res.status == 401) {
+            showLoginMessage("Email or Password is wrong.", SeverityEnum.error);
+          } else {
+            showLoginMessage("Error: " + res.statusText, SeverityEnum.fatal);
+          }
+        });
     }
     setIsLoading(false);
-  }
-
+  };
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-stretch space-y-8 pt-16">
@@ -73,9 +80,7 @@ export default function Page() {
             placeholder="Enter your email"
             value={email}
             onValueChange={setEmail}
-            startContent={
-              <EnvelopeIcon className="h-5"/>
-            }
+            startContent={<EnvelopeIcon className="h-5" />}
             type="email"
             className="w-full"
           />
@@ -86,12 +91,14 @@ export default function Page() {
             placeholder="Enter your password"
             value={password}
             onValueChange={setPassword}
-            startContent={
-              <LockClosedIcon className="h-5"/>
-            }
+            startContent={<LockClosedIcon className="h-5" />}
             endContent={
-              <button className="focus:outline-none" type="button" onClick={togglePasswordVisibility}>
-                {passwordIsVisible ? (<EyeSlashFilledIcon/>) : (<EyeFilledIcon/>)}
+              <button
+                className="focus:outline-none"
+                type="button"
+                onClick={togglePasswordVisibility}
+              >
+                {passwordIsVisible ? <EyeSlashFilledIcon /> : <EyeFilledIcon />}
               </button>
             }
             type={passwordIsVisible ? "text" : "password"}
@@ -102,12 +109,17 @@ export default function Page() {
             isDisabled={isDisabled}
             className="w-1/2 w-min-80"
             color="default"
-            onPress={_ => submitLoginForm(_)}
-            variant="flat">
+            onPress={(_) => submitLoginForm(_)}
+            variant="flat"
+          >
             Login
           </Button>
         </form>
-        <Snackbar message={loginMessage} isVisible={messageIsVisible} severity={messageSeverity}/>
+        <Snackbar
+          message={loginMessage}
+          isVisible={messageIsVisible}
+          severity={messageSeverity}
+        />
       </div>
     </div>
   );

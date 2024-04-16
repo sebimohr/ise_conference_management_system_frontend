@@ -1,15 +1,21 @@
-'use client' // Error components must be Client Components
+"use client"; // Error components must be Client Components
 
-import {useEffect} from 'react'
+import { useEffect } from "react";
 
-export default function GlobalError({error, reset}: {
-  error: Error & { digest?: string }
-  reset: () => void
+/**
+ * The error page on malicious requests.
+ */
+export default function GlobalError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   useEffect(() => {
     // Log the error to an error reporting service
-    console.error(error)
-  }, [error])
+    console.error(error);
+  }, [error]);
 
   return (
     <div>
@@ -23,5 +29,5 @@ export default function GlobalError({error, reset}: {
         Try again
       </button>
     </div>
-  )
+  );
 }
