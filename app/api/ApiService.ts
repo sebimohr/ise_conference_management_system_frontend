@@ -44,7 +44,7 @@ export default class ApiService {
     return this.get(EndpointEnum.singleReviewRoute, reviewId);
   }
 
-  postReviewEndpoint(reviewDto: ReviewDto, reviewId: string): Promise<Response> {
+  putPapersReviewEndpoint(reviewDto: ReviewDto, reviewId: string): Promise<Response> {
     return this.put(EndpointEnum.singleReviewRoute, reviewDto, reviewId);
   }
 
@@ -75,7 +75,7 @@ export default class ApiService {
     }
 
     const fetchOptions = {
-      method: "PUT",
+      method: (endpoint == EndpointEnum.authorizeRoute ? "POST" : "PUT"),
       headers: header,
       body: JSON.stringify(data),
     };

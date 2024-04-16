@@ -49,7 +49,7 @@ export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
 
   const sendPostRequestForReviewToBackend = (reviewState: ReviewStateEnum) => {
     setIsPosting(true);
-    ApiService.getInstance().postReviewEndpoint(new ReviewDto(
+    ApiService.getInstance().putPapersReviewEndpoint(new ReviewDto(
       props.currentReview.paper.id,
       new Date(),
       rating,

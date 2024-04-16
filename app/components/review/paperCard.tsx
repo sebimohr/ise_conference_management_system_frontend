@@ -13,6 +13,7 @@ export default function PaperCard(props: { reviewPaperDto: ReviewPaperDto, isRev
   return (
     <Card
       className="w-full space-y-5 p-4"
+      isHoverable={true}
       radius="lg">
       <CardHeader className="flex gap-3">
         <DocumentIcon

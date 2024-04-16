@@ -1,9 +1,10 @@
 import React from "react";
+import {ReviewPaperDto} from "@/app/api/dataStructure/ReviewPaperDto";
 
-export default function PaperReviewsList() {
+export default function PaperReviewsList(props: { reviewList: ReviewPaperDto[] }) {
   return (
-    <div>
-      {/* TODO: list all reviews as cards, also show paper details */}
+    <div className="flex gap-8">
+      {props.reviewList.map(review => <></>)}
     </div>
   );
 }
