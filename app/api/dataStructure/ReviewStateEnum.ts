@@ -1,5 +1,5 @@
 export enum ReviewStateEnum {
-  open,
-  draft,
-  submitted
+  open = "open",
+  draft = "draft",
+  submitted = "submitted"
 }

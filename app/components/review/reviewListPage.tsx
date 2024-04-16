@@ -7,19 +7,23 @@ import {ReviewPaperDto} from "@/app/api/dataStructure/ReviewPaperDto";
 export default async function ReviewListPage(props: { state: ReviewStateEnum, paperList: ReviewPaperDto[] }) {
   let currentSiteName = () => {
     switch (props.state) {
-    case ReviewStateEnum.open:
-      return "Open";
-    case ReviewStateEnum.draft:
-      return "Draft";
-    case ReviewStateEnum.submitted:
-      return "Submitted";
+      case ReviewStateEnum.open:
+        return "Open";
+      case ReviewStateEnum.draft:
+        return "Draft";
+      case ReviewStateEnum.submitted:
+        return "Submitted";
     }
   }
 
   return (
     <div className={"pt-8"}>
       <Headline headline={`Your ${currentSiteName()} Reviews`}/>
-      <ReviewPaperList reviewState={props.state} paperList={props.paperList}/>
+      {
+        props.paperList.length > 0 ?
+          <ReviewPaperList paperList={props.paperList}/> :
+          <p>No reviews available at the moment.</p>
+      }
     </div>
   );
 }

@@ -19,7 +19,7 @@ export default class ApiService {
   }
 
   authenticateUserEndpoint(loginDto: UserDto): Promise<Response> {
-    return this.post(EndpointEnum.authorizeRoute, loginDto);
+    return this.put(EndpointEnum.authorizeRoute, loginDto);
   }
 
   getReviewsEndpoint(reviewState: ReviewStateEnum): Promise<Response> {
@@ -44,8 +44,8 @@ export default class ApiService {
     return this.get(EndpointEnum.singleReviewRoute, reviewId);
   }
 
-  postReviewEndpoint(reviewDto: ReviewDto, reviewId: string): Promise<Response> {
-    return this.post(EndpointEnum.singleReviewRoute, reviewDto, reviewId);
+  putPapersReviewEndpoint(reviewDto: ReviewDto, reviewId: string): Promise<Response> {
+    return this.put(EndpointEnum.singleReviewRoute, reviewDto, reviewId);
   }
 
   getPaperReviewsEndpoint(paperId: string): Promise<Response> {
@@ -56,7 +56,7 @@ export default class ApiService {
     return `${BACKEND_API_BASE_URL}${endpoint.valueOf()}${reviewId ? `/${reviewId}` : ""}`;
   }
 
-  private async post(
+  private async put(
     endpoint: EndpointEnum,
     data: any = null,
     reviewId?: string
@@ -75,7 +75,7 @@ export default class ApiService {
     }
 
     const fetchOptions = {
-      method: "POST",
+      method: (endpoint == EndpointEnum.authorizeRoute ? "POST" : "PUT"),
       headers: header,
       body: JSON.stringify(data),
     };

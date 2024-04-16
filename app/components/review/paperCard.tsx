@@ -4,14 +4,16 @@ import {DocumentIcon} from "@heroicons/react/24/outline";
 import {ROUTE_REVIEWS} from "@/app/components/home/routes";
 import {ReviewPaperDto} from "@/app/api/dataStructure/ReviewPaperDto";
 
-export default function PaperCard(props: { reviewPaperDot: ReviewPaperDto, isReviewable: boolean }) {
-  const redirectURL = (props.isReviewable ? `${ROUTE_REVIEWS}/review/` : '/paper/') + props.reviewPaperDot.id
-  const paper = props.reviewPaperDot.paper
-
+export default function PaperCard(props: { reviewPaperDto: ReviewPaperDto, isReviewable: boolean }) {
+  const redirectURL = (props.isReviewable ?
+    `${ROUTE_REVIEWS}/review/${props.reviewPaperDto.id}` :
+    `/paper/${props.reviewPaperDto.paper.id}`)
+  const paper = props.reviewPaperDto.paper
 
   return (
     <Card
       className="w-full space-y-5 p-4"
+      isHoverable={true}
       radius="lg">
       <CardHeader className="flex gap-3">
         <DocumentIcon

@@ -6,9 +6,10 @@ import {EyeFilledIcon, EyeSlashFilledIcon} from "@nextui-org/shared-icons";
 import {EnvelopeIcon, LockClosedIcon} from "@heroicons/react/20/solid";
 import ApiService from "@/app/api/ApiService";
 import {UserDto} from "@/app/api/dataStructure/UserDto";
-import LoginMessage from "@/app/components/login/loginMessage";
 import {PressEvent} from "@react-types/shared";
 import {setSessionData} from "@/app/api/SessionManagement";
+import Snackbar from "@/app/components/home/snackbar";
+import {SeverityEnum} from "@/app/helpers/errorHandler";
 
 export default function Page() {
   const apiService = ApiService.getInstance();
@@ -17,12 +18,25 @@ export default function Page() {
   // const [emailHasCorrectFormat, setEmailHasCorrectFormat] = React.useState(true); // TODO: check if email is valid
   const [isLoading, setIsLoading] = React.useState(false);
 
+  const [isDisabled, setIsDisabled] = React.useState(false);
+
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const [loginMessage, setLoginMessage] = React.useState<string>();
+  const [messageIsVisible, setMessageIsVisible] = React.useState(false);
+  const [loginMessage, setLoginMessage] = React.useState("");
+  const [messageSeverity, setMessageSeverity] = React.useState(SeverityEnum.success);
 
   const togglePasswordVisibility = () => setPasswordIsVisible(!passwordIsVisible);
+
+  const showLoginMessage = (message: string, severity: SeverityEnum) => {
+    setMessageIsVisible(true)
+    setLoginMessage(message)
+    setMessageSeverity(severity)
+    if (severity == SeverityEnum.success) {
+      setIsDisabled(true);
+    }
+  }
 
   const submitLoginForm = async (e: PressEvent) => {
     setIsLoading(true);
@@ -33,12 +47,12 @@ export default function Page() {
                       .then(async res => {
                         if (res.status == 200) {
                           let token = await res.json() as AuthorizationDto
-                          setLoginMessage("Successfully logged in.")
+                          showLoginMessage("Successfully logged in.", SeverityEnum.success)
                           await setSessionData(token.auth_token)
-                        } else if (res.status in [401, 404]) {
-                          setLoginMessage("Email or Password is wrong.");
+                        } else if (res.status == 401) {
+                          showLoginMessage("Email or Password is wrong.", SeverityEnum.error);
                         } else {
-                          setLoginMessage("Error: " + res.statusText);
+                          showLoginMessage("Error: " + res.statusText, SeverityEnum.fatal);
                         }
                       });
     }
@@ -53,6 +67,7 @@ export default function Page() {
         <form className="flex flex-col w-full gap-4 pb-4 items-center justify-center">
           <Input
             isClearable
+            isDisabled={isDisabled}
             label="Email"
             variant="flat"
             placeholder="Enter your email"
@@ -66,6 +81,7 @@ export default function Page() {
           />
           <Input
             label="Password"
+            isDisabled={isDisabled}
             variant="flat"
             placeholder="Enter your password"
             value={password}
@@ -83,6 +99,7 @@ export default function Page() {
           />
           <Button
             isLoading={isLoading}
+            isDisabled={isDisabled}
             className="w-1/2 w-min-80"
             color="default"
             onPress={_ => submitLoginForm(_)}
@@ -90,9 +107,7 @@ export default function Page() {
             Login
           </Button>
         </form>
-        <div>
-          {loginMessage != undefined && <LoginMessage message={loginMessage}/>}
-        </div>
+        <Snackbar message={loginMessage} isVisible={messageIsVisible} severity={messageSeverity}/>
       </div>
     </div>
   );
