@@ -88,7 +88,7 @@ export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
                   showClientMessage("Something went wrong!", SeverityEnum.error);
                 else
                   showClientMessage(
-                    "Successfully submitted!" +
+                    "Successfully submitted! " +
                     (reviewState == ReviewStateEnum.draft
                       ? "(Draft)"
                       : "Please navigate back to the homes screen."),
@@ -98,6 +98,11 @@ export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
                 if (reviewState != ReviewStateEnum.submitted) setIsPosting(false);
               });
   };
+
+  if (props.currentReview.reviewState == ReviewStateEnum.submitted) {
+    showClientMessage("You're not allowed to modify this review, as it's already submitted!", SeverityEnum.error);
+    setIsPosting(true);
+  }
 
   return (
     <div className="gap-8">

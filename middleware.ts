@@ -1,5 +1,5 @@
-import type { NextRequest } from "next/server";
-import { AUTH_SESSION_KEY } from "@/app/api/Constants";
+import type {NextRequest} from "next/server";
+import {AUTH_SESSION_KEY} from "@/app/api/Constants";
 
 /**
  * Runs before each new request, checks if session is valid..
@@ -19,6 +19,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|.*\\.webp$|.*\\.png$|.*\\.svg$).*)",
+    "/((?!api|_next/static|_next/image|.*\\.webp$|.*\\.png$|.*\\.svg$|.*\\.ico$).*)",
   ],
 };

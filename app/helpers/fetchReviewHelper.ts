@@ -1,6 +1,6 @@
-import { ReviewStateEnum } from "@/app/api/dataStructure/ReviewStateEnum";
+import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
 import ApiService from "@/app/api/ApiService";
-import { ReviewPaperDto } from "@/app/api/dataStructure/ReviewPaperDto";
+import {ReviewPaperDto} from "@/app/api/dataStructure/ReviewPaperDto";
 
 const apiService = ApiService.getInstance();
 
@@ -61,7 +61,16 @@ export async function getPaperWithAllReviews(paperId: string) {
 
   checkIfResponseIsOk(res);
 
-  return (await res.json()) as ReviewPaperDto[];
+  let dataFiltered: ReviewPaperDto[] = [];
+  let data = await res.json() as ReviewPaperDto[];
+
+  // filter out only submitted reviews
+  data.forEach(paper => {
+    if (paper.reviewState == ReviewStateEnum.submitted)
+      dataFiltered.push(paper)
+  })
+
+  return dataFiltered
 }
 
 /**

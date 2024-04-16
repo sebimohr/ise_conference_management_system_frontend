@@ -1,17 +1,8 @@
 import React from "react";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Chip,
-  Divider,
-  Link,
-} from "@nextui-org/react";
-import { DocumentIcon } from "@heroicons/react/24/outline";
-import { ROUTE_REVIEWS } from "@/app/components/home/routes";
-import { ReviewPaperDto } from "@/app/api/dataStructure/ReviewPaperDto";
+import {Button, Card, CardBody, CardFooter, CardHeader, Chip, Divider, Link,} from "@nextui-org/react";
+import {DocumentIcon} from "@heroicons/react/24/outline";
+import {ROUTE_REVIEWS} from "@/app/components/home/routes";
+import {ReviewPaperDto} from "@/app/api/dataStructure/ReviewPaperDto";
 
 /**
  * Shows a single paper that can be reviewed or viewed.
@@ -41,9 +32,16 @@ export default function PaperCard(props: {
           <p className={"text-sm text-start"}>
             Author: {paper.submissionAuthor}
           </p>
+          <div className="flex flex-row gap-2">
+            {paper.authors.map((author) => (
+              <Chip key={author} variant="flat" color="secondary">
+                {author}
+              </Chip>
+            ))}
+          </div>
         </div>
       </CardHeader>
-      <Divider />
+      <Divider/>
       <CardBody>
         <p className={"text-sm"}>{paper.paperAbstract}</p>
         {/*  TODO: add rating when props.isReviewable is false */}

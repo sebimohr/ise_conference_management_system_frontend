@@ -1,5 +1,5 @@
 import React from "react";
-import { getPaperWithAllReviews } from "@/app/helpers/fetchReviewHelper";
+import {getPaperWithAllReviews} from "@/app/helpers/fetchReviewHelper";
 import dynamic from "next/dynamic";
 import PaperReviewsList from "@/app/components/paper/paperReviewsList";
 
@@ -24,7 +24,6 @@ export default async function Page({
     <div className="flex flex-col w-full gap-4">
       <div className="w-full gap-4">
         <p className="text-center text-3xl">{reviewList[0].paper.title}</p>
-        {/* TODO: Add paper details */}
       </div>
       <div className="grid w-full space-x-4 lg:grid-cols-2">
         <PdfViewerClient paper={reviewList[0].paper.pdf} />
