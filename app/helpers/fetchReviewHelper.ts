@@ -9,7 +9,10 @@ export async function getReviewList(state: ReviewStateEnum) {
 
   checkIfResponseIsOk(res)
 
-  return await res.json() as ReviewPaperDto[]
+  let data = await res.json() as ReviewPaperDto[]
+  console.log(data)
+
+  return data
 }
 
 export async function getSingleReview(reviewId: string) {

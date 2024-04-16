@@ -26,8 +26,7 @@ export default function PdfView(props: { paper: string }) {
         <Viewer
           fileUrl={paperUrl()}
           httpHeaders={{
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET"
+            "Access-Control-Allow-Origin": "*"
           }}
           plugins={[
             defaultLayoutPluginInstance,
