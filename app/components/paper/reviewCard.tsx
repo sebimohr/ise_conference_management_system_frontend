@@ -29,8 +29,8 @@ export default function ReviewCard(props: { review: ReviewPaperDto }) {
           radius="sm"
         />
         <div className="flex flex-col ps-2 gap-2">
-          <p className="text-md">Author: {props.review.user.email}</p>
-          <p className={"text-sm text-start"}>Date: {props.review.reviewDate.toLocaleDateString("en_IE")}</p>
+          <p className="text-md">Author: {props.review.user ? props.review.user.email : "You"}</p>
+          <p className={"text-sm text-start"}>Date: {props.review.reviewDate.toString()}</p>
         </div>
       </CardHeader>
       <Divider/>

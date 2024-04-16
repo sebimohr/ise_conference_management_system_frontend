@@ -11,7 +11,19 @@ import {SeverityEnum} from "@/app/helpers/errorHandler";
 import Snackbar from "@/app/components/home/snackbar";
 
 export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
-  const [rating, setRating] = useState(props.currentReview.rating ?? 0);
+  const initialRating = () => {
+    if (!props.currentReview.rating) {
+      return 0;
+    } else if (props.currentReview.rating < -2) {
+      return -2;
+    } else if (props.currentReview.rating > 2) {
+      return 2;
+    } else {
+      return props.currentReview.rating
+    }
+  }
+
+  const [rating, setRating] = useState(initialRating());
   const [reviewDetails, setReviewDetails] = useState(props.currentReview.reviewDetails ?? "");
   const [reviewComment, setReviewComment] = useState(props.currentReview.reviewComment ?? "");
 
@@ -23,8 +35,9 @@ export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
     let ratingValueNumber = rating;
 
     // this will never happen, as the slider is always returning a number, but is needed for compilation
-    if (Array.isArray(newRatingValue))
+    if (Array.isArray(newRatingValue)) {
       ratingValueNumber = newRatingValue[0];
+    }
 
     setRating(ratingValueNumber);
   }
@@ -60,9 +73,13 @@ export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
       if (!res.ok)
         showClientMessage("Something went wrong!", SeverityEnum.error);
       else
-        showClientMessage("Successfully submitted!" + (reviewState == ReviewStateEnum.draft ? "(Draft)" : ""),
+        showClientMessage("Successfully submitted!" + (reviewState == ReviewStateEnum.draft ?
+          "(Draft)" :
+          "Please navigate back to the homes screen."),
                           SeverityEnum.success)
-      setIsPosting(false);
+
+      if (reviewState != ReviewStateEnum.submitted)
+        setIsPosting(false);
     });
   }
 
@@ -77,11 +94,10 @@ export default function ReviewForm(props: { currentReview: ReviewPaperDto }) {
         maxValue={2}
         minValue={-2}
         fillOffset={0}
-        defaultValue={rating}
-        onChange={handleRatingSliderInput}
+        onChange={val => handleRatingSliderInput(val)}
+        color={rating < 0 ? "danger" : (rating == 0 ? "warning" : "success")}
         classNames={{
           base: "w-full",
-          filler: "bg-gradient-to-r from-red-300 to-green-300 dark:from-red-600 dark:to-green-800",
         }}
       />
       <Textarea

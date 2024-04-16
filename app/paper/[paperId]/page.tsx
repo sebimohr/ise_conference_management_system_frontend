@@ -8,11 +8,12 @@ const PdfViewerClient = dynamic(() => import ("@/app/components/review/pdfView")
 
 export default async function Page({params}: { params: { paperId: string } }) {
   const reviewList = await getPaperWithAllReviews(params.paperId)
+  console.log(reviewList)
 
   return (
-    <div className="flex w-full gap-4">
+    <div className="flex flex-col w-full gap-4">
       <div className="w-full gap-4">
-        <p>{reviewList[0].paper.title}</p>
+        <p className="text-center text-3xl">{reviewList[0].paper.title}</p>
         {/* TODO: Add paper details */}
       </div>
       <div className="grid w-full space-x-4 lg:grid-cols-2">
