@@ -1,15 +1,20 @@
-import {Paper} from "./Paper";
-import {ReviewStateEnum} from "@/app/api/dataStructure/ReviewStateEnum";
+import { Paper } from "./Paper";
+import { ReviewStateEnum } from "@/app/api/dataStructure/ReviewStateEnum";
 
+/**
+ * This data class will be filled by the response data from all endpoints returning reviews.
+ */
 export class ReviewPaperDto {
-  constructor(id: string,
-              paper: Paper,
-              reviewDate: Date,
-              rating: number,
-              reviewDetails: string,
-              reviewComment: string,
-              reviewState: ReviewStateEnum,
-              user: ReviewAuthor) {
+  constructor(
+    id: string,
+    paper: Paper,
+    reviewDate: Date,
+    rating: number,
+    reviewDetails: string,
+    reviewComment: string,
+    reviewState: ReviewStateEnum,
+    user: ReviewAuthor
+  ) {
     this.id = id;
     this.paper = paper;
     this.reviewDate = reviewDate;
@@ -20,12 +25,12 @@ export class ReviewPaperDto {
     this.user = user;
   }
 
-  id: string
-  paper: Paper
-  reviewDate: Date
-  rating: number
-  reviewDetails: string
-  reviewComment: string // the comment of the current reviewer
-  user: ReviewAuthor
-  reviewState: ReviewStateEnum
+  id: string;
+  paper: Paper;
+  reviewDate: Date;
+  rating: number;
+  reviewDetails: string;
+  reviewComment: string; // the comment of the current reviewer
+  user: ReviewAuthor;
+  reviewState: ReviewStateEnum;
 }

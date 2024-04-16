@@ -1,9 +1,15 @@
-'use client'
+"use client";
 
 import React from "react";
-import {Card, CardBody, CardHeader} from "@nextui-org/react";
+import { Card, CardBody, CardHeader } from "@nextui-org/react";
 
-export default function ReviewCommentComponent(props: { reviewComment: string, id: number }) {
+/**
+ * Shows a single reviewer comment.
+ */
+export default function ReviewCommentComponent(props: {
+  reviewComment: string;
+  id: number;
+}) {
   return (
     <Card key={props.id} className={"m-4"}>
       <CardHeader>
@@ -11,9 +17,7 @@ export default function ReviewCommentComponent(props: { reviewComment: string, i
           <p className="text-md">Comment #{props.id}</p>
         </div>
       </CardHeader>
-      <CardBody>
-        {props.reviewComment}
-      </CardBody>
+      <CardBody>{props.reviewComment}</CardBody>
     </Card>
   );
 }
