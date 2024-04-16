@@ -17,7 +17,7 @@ export default async function ReviewListPage(props: { state: ReviewStateEnum, pa
   }
 
   return (
-    <div className={"pt-8"}>
+    <div className={"pt-8 h-full"}>
       <Headline headline={`Your ${currentSiteName()} Reviews`}/>
       {
         props.paperList.length > 0 ?

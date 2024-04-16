@@ -35,10 +35,10 @@ export default function NavBar() {
 
   return (
     <Navbar shouldHideOnScroll>
-      <NavbarBrand>
+      <NavbarBrand className={"hidden sm:flex"}>
         <Image className="h-16" alt="reviewer_logo" src="/logo.webp"/>
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4 space-x-4" justify="center">
+      <NavbarContent className="gap-4 space-x-4" justify="center">
         <NavbarItem isActive={usePathname() == ROUTE_HOME}>
           <Link color="foreground" aria-current="page" href={ROUTE_HOME}>
             Home
