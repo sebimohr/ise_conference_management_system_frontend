@@ -30,7 +30,7 @@ export default function ReviewCard(props: { review: ReviewPaperDto }) {
         />
         <div className="flex flex-col ps-2 gap-2">
           <p className="text-md">Author: {props.review.user ? props.review.user.email : "You"}</p>
-          <p className={"text-sm text-start"}>Date: {props.review.reviewDate.toString()}</p>
+          <p className={"text-sm text-start"}>Date: {props.review.reviewDate.toString().slice(0, 10)}</p>
         </div>
       </CardHeader>
       <Divider/>
